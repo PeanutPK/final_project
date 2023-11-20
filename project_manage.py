@@ -1,8 +1,8 @@
 # BEGIN part 1
 
 # import database module
-
-# define a funcion called initializing
+import database
+# define a function called initializing
 
 def initializing():
     pass

@@ -22,11 +22,6 @@ class Read:
         return _list
 
 
-persons = Read('persons.csv')
-
-print(persons.readCSV())
-
-
 def gen_comb_list(list_set):
     if len(list_set) == 1:
         start_list = []
@@ -150,5 +145,10 @@ class Table:
     def __str__(self):
         return self.name + ':' + str(self.table)
 
+
 # modify the code in the Table class so that it supports the insert operation
 # where an entry can be added to a list of dictionary
+
+def test():
+    persons = Read('persons.csv')
+    print(persons.readCSV())
