@@ -56,7 +56,8 @@ val = login()
 
 # CONTINUE to part 2 (to be done for the next due date)
 
-# based on the return value for login, activate the code that performs activities according to the role defined for that person_id
+# based on the return value for login, activate the code that
+# performs activities according to the role defined for that person_id
 
 # if val[1] = 'admin':
     # do admin related activities
