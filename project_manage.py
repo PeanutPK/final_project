@@ -1,5 +1,3 @@
-# BEGIN part 1
-
 # import database module
 import database
 # define a function called initializing
@@ -15,26 +13,14 @@ def initializing():
     # add the 'persons' table into the database
     my_db = database.DB.insert(person_table)
     # create a 'login' table
+    # create an object to read all csv files that will serve as a persistent state for this program
 
-    # the 'login' table has the following keys (attributes):
-        # person_id
-        # username
-        # password
-        # role
+    # create all the corresponding tables for those csv files
 
-    # a person_id is the same as that in the 'persons' table
+    # see the guide how many tables are needed
 
-    # let a username be a person's fisrt name followed by a dot and the first letter of that person's last name
+    # add all these tables to the database
 
-    # let a password be a random four digits string
-
-    # let the initial role of all the students be Member
-
-    # let the initial role of all the faculties be Faculty
-
-    # create a login table by performing a series of insert operations; each insert adds a dictionary to a list
-
-    # add the 'login' table into the database
 
 # define a funcion called login
 
@@ -44,7 +30,18 @@ def login():
 # here are things to do in this function:
    # add code that performs a login task
         # ask a user for a username and password
-        # returns [person_id, role] if valid, otherwise returning None
+        # returns [ID, role] if valid, otherwise returning None
+
+# define a function called exit
+def exit():
+    pass
+
+# here are things to do in this function:
+   # write out all the tables that have been modified to the corresponding csv files
+   # By now, you know how to read in a csv file and transform it into a list of dictionaries. For this project, you also need to know how to do the reverse, i.e., writing out to a csv file given a list of dictionaries. See the link below for a tutorial on how to do this:
+   
+   # https://www.pythonforbeginners.com/basics/list-of-dictionaries-to-csv-in-python
+
 
 # make calls to the initializing and login functions defined above
 
@@ -57,14 +54,20 @@ val = login()
 
 # based on the return value for login, activate the code that
 # performs activities according to the role defined for that person_id
+# based on the return value for login, activate the code that performs activities according to the role defined for that person_id
 
 # if val[1] = 'admin':
-    # do admin related activities
-# elif val[1] = 'advisor':
-    # do advisor related activities
-# elif val[1] = 'lead':
-    # do lead related activities
+    # see and do admin related activities
+# elif val[1] = 'student':
+    # see and do student related activities
 # elif val[1] = 'member':
-    # do member related activities
+    # see and do member related activities
+# elif val[1] = 'lead':
+    # see and do lead related activities
 # elif val[1] = 'faculty':
-    # do faculty related activities
+    # see and do faculty related activities
+# elif val[1] = 'advisor':
+    # see and do advisor related activities
+
+# once everyhthing is done, make a call to the exit function
+exit()
