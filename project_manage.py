@@ -5,16 +5,15 @@ import database
 # define a function called initializing
 
 def initializing():
-    pass
 
 # here are things to do in this function:
 
     # create an object to read an input csv file, persons.csv
-
+    persons = database.Read('persons.csv')
     # create a 'persons' table
-
+    person_table = database.Table('persons', persons.readCSV())
     # add the 'persons' table into the database
-
+    my_db = database.DB.insert(person_table)
     # create a 'login' table
 
     # the 'login' table has the following keys (attributes):

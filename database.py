@@ -7,22 +7,19 @@ import copy
 
 
 class Read:
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, file):
+        self.file = file
 
     def readCSV(self):
         __location__ = os.path.realpath(
             os.path.join(os.getcwd(), os.path.dirname(__file__))
         )
         _list = []
-        with open(os.path.join(__location__, self.name)) as f:
+        with open(os.path.join(__location__, self.file)) as f:
             rows = csv.DictReader(f)
             for row in rows:
                 _list.append(dict(row))
         return _list
-
-    def __str__(self):
-        return f"Data: {self.readCSV()}"
 
 
 # add in code for a Database class
@@ -30,22 +27,25 @@ class Read:
 
 class DB:
     def __init__(self):
-        self.database = []
+        self.__database = []
 
     def insert(self, new_table):
-        self.database.append(new_table)
+        self.__database.append(new_table)
 
     def search(self, name):
-        for data in self.database:
-            if data == name:
+        for data in self.__database:
+            if data.name == name:
                 return data
         print(f"No table name {name}. Please try again")
         return None
 
     def delete(self, table_delete):
         if self.search(table_delete) is not None:
-            self.database.remove(table_delete)
+            self.__database.remove(table_delete)
         self.search(table_delete)
+
+    def __str__(self):
+        return f"{self.__database}"
 
 
 # add in code for a Table class
@@ -115,7 +115,16 @@ class Table:
 
 def test():
     persons = Read("persons.csv")
-    print(persons)
+    print(persons.readCSV())
+    print()
+
+    my_DB = DB()
+    my_table = Table("persons", persons.readCSV())
+    print(my_table)
+    my_DB.insert(my_table)
+    print()
+
+    print(my_DB.search("persons"))
 
 
 test()
