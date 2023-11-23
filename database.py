@@ -36,7 +36,7 @@ class DB:
         for data in self.__database:
             if data.name == name:
                 return data
-        print(f"No table name {name}. Please try again")
+        print(f"No table name {name}. Please try again.")
         return None
 
     def delete(self, table_delete):
@@ -55,6 +55,18 @@ class Table:
     def __init__(self, name, table):
         self.name = name
         self.table = table
+
+    def update(self, userid, key, value):
+        for data in self.table:
+            if data['ID'] == userid:
+                data[key] = value
+
+    def search(self, name):
+        for data in self.table:
+            if data == name:
+                return data
+        print(f"No table name {name}. Please try again.")
+        return None
 
     def insert(self, new_table):
         self.table.append(new_table)
@@ -115,19 +127,31 @@ class Table:
 
 def test():
     persons = Read("persons.csv")
+    login = Read("login.csv").readCSV()
+    print("read")
     print(persons.readCSV())
     print()
 
     my_DB = DB()
     my_table = Table("persons", persons.readCSV())
+    print("table")
     print(my_table)
     my_DB.insert(my_table)
     print()
 
+    print("DB")
     print(my_DB.search("persons"))
+    print()
+
+    my_table.update("7447677", "type", "faculty")
+    print("update")
+    print(my_table)
+
+    my_table.insert(login)
+    print(my_table)
 
 
-test()
+# test()
 # modify the code in the Table class so that it supports the insert operation
 # where an entry can be added to a list of dictionary
 

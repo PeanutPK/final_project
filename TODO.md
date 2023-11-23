@@ -1,6 +1,6 @@
-# What to do?
+# TODO
 ## Senior project report
-### Type
+
 1. **Student**
    - **Lead**
      - [ ] Create project
