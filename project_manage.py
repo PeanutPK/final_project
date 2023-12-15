@@ -11,14 +11,8 @@ def initializing():
     Thia function initializing what you need in the main program.
     :return:
     """
-    # here are things to do in this function:
-    # create an object to read an input csv file, persons.csv
-    # create an object to read all csv files that will serve
-    # as a persistent state for this program
     persons = Read("persons.csv").readCSV()
     login_t = Read("login.csv").readCSV()
-    # create all the corresponding tables for those csv files
-    # see the guide how many tables are needed
     person_table = Table("persons", persons)
     login_table = Table("login", login_t)
     project_table = Table("project", Read("Project.csv").readCSV())
@@ -29,14 +23,14 @@ def initializing():
         "member_pending_request", Read("Member_pending_request.csv").readCSV()
     )
 
-    # # Enable the line below to test the table
+    # Enable the line below to test the table
     print(person_table)
     print(login_table)
     print(project_table)
     print(Advisor_pending_request_table)
     print(Member_pending_request_table)
 
-    # add all these tables to the database
+    # add tables to the database
     my_db.insert(person_table)
     my_db.insert(login_table)
     my_db.insert(project_table)
@@ -44,10 +38,11 @@ def initializing():
     my_db.insert(Member_pending_request_table)
 
 
-# define a function called login
-
-
 def login():
+    """
+    Using user id as a username and a password to enter to a certain role.
+    :return:
+    """
     ID = str(input("Type in username: "))
     password_enter = str(input("Type in the password: "))
     my_login = my_db.search("login")
@@ -78,16 +73,7 @@ def exit():
         writer.writerow(dictionary.values())
     myFile.close()
 
-
-# Here are things to do in this function:
-# write out all the tables that have been modified
-# to the corresponding csv files
-# By now, you know how to read in a csv file and
-# transform it into a list of dictionaries.
-# For this project, you also need to know how to do the reverse,
-# i.e., writing out to a csv file given a list of dictionaries.
-# See the link below for a tutorial on how to do this:
-
+# link for the code writing down back to csv files
 # https://www.pythonforbeginners.com/basics/list-of-dictionaries-to-csv-in-python
 
 
@@ -95,6 +81,7 @@ def exit():
 
 initializing()
 val = login()
+print(val)
 # END part 1
 
 # CONTINUE to part 2 (to be done for the next due date)

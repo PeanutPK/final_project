@@ -123,7 +123,12 @@ class Table:
         return temps
 
     def __str__(self):
-        return self.name + ":" + str(self.table)
+        _str = self.name
+        num = 1
+        for _dict in self.table:
+            _str += f'\n{num:<4}{_dict}'
+            num += 1
+        return _str
 
 
 # modify the code in the Table class so that it supports the insert operation
