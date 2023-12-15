@@ -1,5 +1,6 @@
 # import database module
 from database import DB, Read, Table
+import csv
 
 # define a function called initializing
 my_db = DB()
@@ -29,11 +30,11 @@ def initializing():
     )
 
     # # Enable the line below to test the table
-    # print(person_table)
-    # print(login_table)
-    # print(project_table)
-    # print(Advisor_pending_request_table)
-    # print(Member_pending_request_table)
+    print(person_table)
+    print(login_table)
+    print(project_table)
+    print(Advisor_pending_request_table)
+    print(Member_pending_request_table)
 
     # add all these tables to the database
     my_db.insert(person_table)
@@ -67,7 +68,15 @@ def login():
 
 # define a function called exit
 def exit():
-    pass
+    myFile = open("Project.csv", "w")
+    writer = csv.writer(myFile)
+    writer.writerow(['ProjectID', 'Title',
+                     'Lead', 'Member1',
+                     'Member2', 'Advisor',
+                     'Status'])
+    for dictionary in my_db.search('project').table:
+        writer.writerow(dictionary.values())
+    myFile.close()
 
 
 # Here are things to do in this function:
@@ -86,7 +95,6 @@ def exit():
 
 initializing()
 val = login()
-
 # END part 1
 
 # CONTINUE to part 2 (to be done for the next due date)
@@ -95,17 +103,17 @@ val = login()
 # performs activities according to the role defined for that person_id
 
 # if val[1] = 'admin':
-# see and do admin related activities
+#   see and do admin related activities
 # elif val[1] = 'student':
-# see and do student related activities
+#   see and do student related activities
 # elif val[1] = 'member':
-# see and do member related activities
+#   see and do member related activities
 # elif val[1] = 'lead':
-# see and do lead related activities
+#   see and do lead related activities
 # elif val[1] = 'faculty':
-# see and do faculty related activities
+#   see and do faculty related activities
 # elif val[1] = 'advisor':
-# see and do advisor related activities
+#   see and do advisor related activities
 
 # once everyhthing is done, make a call to the exit function
 exit()
