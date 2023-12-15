@@ -20,27 +20,12 @@ def initializing():
     # see the guide how many tables are needed
     person_table = Table("persons", persons)
     login_table = Table("login", login_t)
-    project_table = Table(
-        "project",
-        [
-            {
-                "ProjectID": "",
-                "Title": "",
-                "Lead": "",
-                "Member1": "",
-                "Member2": "",
-                "Advisor": "",
-                "Status": "",
-            }
-        ],
-    )
+    project_table = Table("project", Read("Project.csv").readCSV())
     Advisor_pending_request_table = Table(
-        "Advisor_pending_request",
-        [{"ProjectID": "", "Request": "", "Response": "", "Response_date": ""}],
+        "advisor_pending_request", Read("Advisor_pending_request.csv").readCSV()
     )
     Member_pending_request_table = Table(
-        "Member_pending_request",
-        [{"ProjectID": "", "Request": "", "Response": "", "Response_date": ""}],
+        "member_pending_request", Read("Member_pending_request.csv").readCSV()
     )
 
     # # Enable the line below to test the table
@@ -72,6 +57,7 @@ def login():
             print(f"Permission: {data['role']}")
             return data
     print("Your username or password is wrong please try again.")
+
 
 # here are things to do in this function:
 # add code that performs a login task
