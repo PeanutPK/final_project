@@ -59,7 +59,12 @@ class Table:
     def update(self, userid, key, value):
         for data in self.table:
             if data['ID'] == userid:
-                data[key] = value
+                if isinstance(data[key], list):
+                    data[key].append(value)
+                elif data[key] == 'admin':
+                    print("You don't have permission to change admin status.")
+                else:
+                    data[key] = value
 
     def search(self, name):
         for data in self.table:
@@ -143,15 +148,23 @@ def test():
     print(my_DB.search("persons"))
     print()
 
+    print('admin change admin status')
     my_table.update("7447677", "type", "faculty")
+    print(my_table)
+    print()
+
     print("update")
-    print(my_table)
+    my_table.update("9898118", "type", "lead")
+    print(my_table.filter(lambda x: x["ID"] == "9898118"))
+    print()
 
-    my_table.insert(login)
-    print(my_table)
+    print("insert login")
+    login_table = Table('login', login)
+    my_DB.insert(login_table)
+    print(my_DB.search('login'))
 
 
-# test()
+test()
 # modify the code in the Table class so that it supports the insert operation
 # where an entry can be added to a list of dictionary
 
