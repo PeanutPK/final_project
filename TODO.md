@@ -18,5 +18,5 @@
    - [ ] See the detail of all the project
    - [ ] Comment on the project (Evaluate projects)
 3. **Admin**
-   - [ ] Manage both database and table
+   - [ ] Manage both database and table of persons and login
 

@@ -82,6 +82,22 @@ def exit():
     For exiting a program and update the csv files.
     :return:
     """
+    # update persons.csv
+    myFile = open("persons.csv", "w")
+    writer = csv.writer(myFile)
+    writer.writerow(['ID', 'first', 'last', 'type'])
+    for dictionary in my_db.search('persons').table:
+        writer.writerow(dictionary.values())
+    myFile.close()
+
+    # update login.csv
+    myFile = open("login.csv", "w")
+    writer = csv.writer(myFile)
+    writer.writerow(['ID', 'username', 'password', 'role'])
+    for dictionary in my_db.search('login').table:
+        writer.writerow(dictionary.values())
+    myFile.close()
+
     # update Project.csv
     myFile = open("Project.csv", "w")
     writer = csv.writer(myFile)
@@ -111,7 +127,7 @@ def exit():
         writer.writerow(dictionary.values())
     myFile.close()
 
-    print('program ends')
+    print('\nprogram ends.........')
     sys.exit()
 
 
