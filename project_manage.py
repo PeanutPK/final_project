@@ -2,7 +2,7 @@
 from database import DB, Read, Table
 import csv
 import sys
-import Roles
+from Roles import Roles
 
 my_db = DB()
 
@@ -58,6 +58,24 @@ def login():
     print("Your username or password is wrong please try again.")
 
 
+def run(value):
+    user = Roles(my_db)
+    role = value[1]
+    userId = value[0]
+    if role == 'admin':
+        user.admin()
+    elif role == 'student':
+        pass
+    elif role == 'member':
+        pass
+    elif role == 'lead':
+        pass
+    elif role == 'faculty':
+        pass
+    elif role == 'advisor':
+        pass
+
+
 # define a function called exit
 def exit():
     """
@@ -105,7 +123,7 @@ def exit():
 if __name__ == "__main__":
     initializing()
     val = login()
-    # run()
+    run(val)
     exit()
 
 # CONTINUE to part 2 (to be done for the next due date)

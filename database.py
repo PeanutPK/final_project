@@ -11,9 +11,17 @@ class Read:
     For reading csv files and use them in table
     """
     def __init__(self, file):
+        """
+        Initial attribute for reading csv
+        :param file:
+        """
         self.file = file
 
     def readCSV(self):
+        """
+        Read a csv file
+        :return:
+        """
         __location__ = os.path.realpath(
             os.path.join(os.getcwd(), os.path.dirname(__file__))
         )
@@ -30,10 +38,18 @@ class Read:
 
 class DB:
     def __init__(self):
+        """
+        Initialize value to database
+        """
         self.__database = []
         self.__name = []
 
     def search(self, name):
+        """
+        Search for a table with the given name in a database
+        :param name:
+        :return:
+        """
         for data in self.database:
             if data.name == name:
                 return data
@@ -41,26 +57,52 @@ class DB:
         return None
 
     def insert(self, new_table):
+        """
+        Insert a new table to a database and store all names in name list
+        :param new_table:
+        """
         self.database.append(new_table)
         self.name.append(new_table.name)
 
     def delete(self, table_delete):
+        """
+        Delete the table in the database and remove the name of the table from
+        a name list
+        :param table_delete:
+        """
         if self.search(table_delete) is not None:
+            self.name.remove(table_delete.name)
             self.database.remove(table_delete)
         self.search(table_delete)
 
     @property
     def database(self):
+        """
+        getter for database
+        :return database:
+        """
         return self.__database
 
     @property
     def name(self):
+        """
+        getter for name
+        :return names:
+        """
         return self.__name
 
     def list(self):
+        """
+        for return a name list
+        :return name list:
+        """
         return f"{self.name}"
 
     def __str__(self):
+        """
+        for default string of a database
+        :return database:
+        """
         return f"{self.database}"
 
 
@@ -69,10 +111,21 @@ class DB:
 
 class Table:
     def __init__(self, name, table):
+        """
+        Initialize attribute for table
+        :param name:
+        :param table:
+        """
         self.name = name
         self.table = table
 
     def update(self, userid, key, value):
+        """
+        Update an existed table value to new one using user id and the topic
+        :param userid:
+        :param key:
+        :param value:
+        """
         for data in self.table:
             if data['ID'] == userid:
                 if isinstance(data[key], list):
@@ -83,9 +136,19 @@ class Table:
                     data[key] = value
 
     def insert(self, new_table):
+        """
+        Insert new data to the table
+        :param new_table:
+        """
         self.table.append(new_table)
 
     def join(self, other_table, key):
+        """
+        Join two tables into one table
+        :param other_table:
+        :param key:
+        :return joined table:
+        """
         joined_table = Table(self.name + "_joined_" + other_table.name, [])
         for tab1 in self.table:
             for tab2 in other_table.tabel:
@@ -97,6 +160,11 @@ class Table:
         return joined_table
 
     def filter(self, condition):
+        """
+        Filter a table using lambda to find a specific data set
+        :param condition:
+        :return:
+        """
         filtered_table = Table(self.name + "_filtered", [])
         for item1 in self.table:
             if condition(item1):
@@ -104,6 +172,11 @@ class Table:
         return filtered_table
 
     def select(self, attributes_list):
+        """
+        Select topics like filter value but filter only the topics
+        :param attributes_list:
+        :return table with only specific topics:
+        """
         temps = []
         for item1 in self.table:
             dict_temp = {}
@@ -114,6 +187,10 @@ class Table:
         return temps
 
     def __str__(self):
+        """
+        for printing out, the table doesn't perfect but usable
+        :return:
+        """
         _str = self.name
         num = 1
         for _dict in self.table:
@@ -159,9 +236,3 @@ def test():
 
 if __name__ == "__main__":
     test()
-
-# modify the code in the Table class so that it supports the insert operation
-# where an entry can be added to a list of dictionary
-
-# modify the code in the Table class so that it supports the update operation
-# where an entry's value associated with a key can be updated
