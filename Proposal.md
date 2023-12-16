@@ -1,7 +1,7 @@
 # Proposal
 ## Senior project report
 * Evaluation step (Advisor)
-  - Approve the project or Decline the project
+  - Approve the project or Decline the project (from ongoing to finished)
   - At least two of the advisor approval
   - Comment on the project about how to improve your code
   - Change the status of the project

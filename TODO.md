@@ -2,11 +2,12 @@
 ## Senior project report
 
 1. **Student**
+   - **general**
+     - [ ] Create project and become lead
+     - [ ] Accept an invitation link and become a member
    - **Lead**
-     - [ ] Create project
      - [ ] Find member
-     - [ ] Send an invitation link
-     - [ ] Add/ remove members
+     - [ ] Send an invitation link to students
      - [ ] Modify owned project
      - [ ] Send request for advisor
      - [ ] Submit project
@@ -14,9 +15,9 @@
      - [ ] See only the project that you are in
 2. **Faculty / Advisor**
    - [ ] Manage request see/accept/deny
-   - [ ] Approves the project they advise on (Advisor only)
+   - [ ] Approves the project (At least two approvals)
    - [ ] See the detail of all the project
    - [ ] Comment on the project (Evaluate projects)
 3. **Admin**
-   - [ ] Manage both database and table of persons and login
+   - [x] Manage both database and table of persons and login (add or delete)
 

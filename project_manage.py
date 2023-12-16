@@ -46,16 +46,22 @@ def login():
     else return, [ID, role]
     :return:
     """
-    ID = str(input("Type in userid: "))
-    password_enter = str(input("Type in the password: "))
+    # set variable for requirement table
     my_login = my_db.search("login")
     my_user = my_login.table
+
+    # input username and password
+    username = str(input("Type in username: "))
+    password_enter = str(input("Type in the password: "))
     for data in my_user:
-        if data["ID"] == ID and data["password"] == password_enter:
+        if data["username"] == username and data["password"] == password_enter:
             print(f"Welcome {data['username']}")
             print(f"Permission: {data['role']}")
             return [data['ID'], data['role']]
-    print("Your username or password is wrong please try again.")
+
+    # If username or password is/are wrong, run the program again
+    print("Your username or password is wrong please try again next time.")
+    sys.exit()
 
 
 def run(value):
@@ -65,11 +71,11 @@ def run(value):
     if role == 'admin':
         user.admin()
     elif role == 'student':
-        pass
+        user.student(userId)
     elif role == 'member':
         pass
     elif role == 'lead':
-        pass
+        print("You are lead no program currently")
     elif role == 'faculty':
         pass
     elif role == 'advisor':

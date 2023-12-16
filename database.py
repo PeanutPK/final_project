@@ -10,6 +10,7 @@ class Read:
     """
     For reading csv files and use them in table
     """
+
     def __init__(self, file):
         """
         Initial attribute for reading csv
@@ -119,21 +120,17 @@ class Table:
         self.name = name
         self.table = table
 
-    def update(self, userid, key, value):
+    def update(self, topic, check, key, value):
         """
-        Update an existed table value to new one using user id and the topic
-        :param userid:
-        :param key:
-        :param value:
+        Update an existed table value to new one
+        :param topic: What topic for checking
+        :param check: Value to check the topic
+        :param key: A key topic to change
+        :param value: Value of a topic that want to change
         """
         for data in self.table:
-            if data['ID'] == userid:
-                if isinstance(data[key], list):
-                    data[key].append(value)
-                elif data[key] == 'admin':
-                    print("You don't have permission to change admin status.")
-                else:
-                    data[key] = value
+            if data[topic] == check:
+                data[key] = value
 
     def insert(self, new_table):
         """
@@ -194,7 +191,7 @@ class Table:
         _str = self.name
         num = 1
         for _dict in self.table:
-            number = str(num)+'.'
+            number = str(num) + '.'
             _str += f'\n{number:<4}{_dict}'
             num += 1
         return _str
@@ -219,12 +216,12 @@ def test():
     print()
 
     print('admin change admin status')
-    my_table.update("7447677", "type", "faculty")
+    my_table.update("ID", "7447677", "type", "faculty")
     print(my_table)
     print()
 
     print("update")
-    my_table.update("9898118", "type", "lead")
+    my_table.update("ID", "9898118", "type", "lead")
     print(my_table.filter(lambda x: x["ID"] == "9898118"))
     print()
 
