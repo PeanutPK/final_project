@@ -6,8 +6,7 @@
      - [ ] Create project and become lead
      - [ ] Accept an invitation link and become a member
    - **Lead**
-     - [ ] Find member
-     - [ ] Send an invitation link to students
+     - [ ] Send an invitation link to students to become members
      - [ ] Modify owned project
      - [ ] Send request for advisor
      - [ ] Submit project

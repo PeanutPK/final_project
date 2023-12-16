@@ -11,6 +11,32 @@ random_project_title = ['QuantumHorizon', 'CipherCraft', 'NebulaForge',
                         'VortexVerve', 'NexusNurturer']
 
 
+def check(table, topic, new_value_method, ask_message=''):
+    """
+    For checking, that may work just a prototype
+    :param table: The self.db.search()
+    :param topic: Such as 'ID' to check in table
+    :param new_value_method: The method of checking new value such as
+    using name (input message) or id (random from 10000000 to 9999999)
+    :param ask_message: The message asks when user needs to type input
+    :return new: new value
+    """
+    new = ''
+    # choose between name and id check
+    if new_value_method == 'name':  # normal string input
+        new = input(f"{ask_message}")
+    elif new_value_method == 'id':  # random ID
+        new = str(random.randint(1000000, 9999999))
+    # incase duplicate
+    while table.filter(lambda x: x[topic] == new).table:
+        print(f"Your input has already taken try again")  # for easier debug
+        if new_value_method == 'name':  # normal string input
+            new = input(f"{ask_message}")
+        elif new_value_method == 'id':  # random id
+            new = str(random.randint(1000000, 9999999))
+    return new
+
+
 class Admin:
     def __init__(self, database):
         self.__role = 'someone'
@@ -22,12 +48,12 @@ class Admin:
         Admin is responsible for administering the database and manages users
         :return:
         """
-        print("What do you want to do")
-        print("1. Add entry")
-        print("2. Remove entry")
-        print("3. Update")
+        print("What do you want to do\n"
+              "1. Add entry\n"
+              "2. Remove entry\n"
+              "3. Update")
         choice = int(input("Pick a number: "))  # let user pick an action
-        if choice not in [1, 2, 3]:  # check if input is within the option
+        if choice not in range(1, 4):  # check if input is within the option
             raise ValueError("Not in choice")
         # start the choice
         if choice == 1:
@@ -56,11 +82,7 @@ class Admin:
         new_login = {'ID': '', 'username': '', 'password': '', 'role': ''}
 
         # checking the existing id and store id
-        new_ID = str(random.randint(1000000, 9999999))
-        while persons_table.filter(lambda x: x['ID'] == new_ID).table:
-            print(
-                'ID already taken generating new one')  # for easier debug
-            new_ID = str(random.randint(1000000, 9999999))
+        new_ID = check(persons_table, 'ID', 'id')
         new_persons['ID'] = new_ID
         new_login['ID'] = new_ID
 
@@ -85,8 +107,7 @@ class Admin:
         new_login['role'] = new_Type
 
         # choose password
-        new_login['password'] = int(
-            input("Please choose 4 digits password: "))
+        new_login['password'] = str(input("Please choose 4 digits password: "))
 
         # # Test before added
         # print(persons_table, '\n')
@@ -177,11 +198,11 @@ class Student:
         :return:
         """
         self.id = user_id
-        print("What do you want to do")
-        print("1. Become lead")
-        print("2. Check member pending request")
+        print("What do you want to do\n"
+              "1. Become lead\n"
+              "2. Check member pending request")
         choice = int(input("Pick a number: "))  # let user pick an action
-        if choice not in [1, 2]:  # check if input is within the option
+        if choice not in range(1, 3):  # check if input is within the option
             raise ValueError("Not in choice")
         if choice == 1:
             # change only the role but the student is still a student
@@ -200,39 +221,25 @@ class Student:
                 lead_username = ID['username']
 
         # making a dict for adding new entry for persons and login
-        new_project = {'ProjectID': '',
-                       'Title': '',
+        new_project = {'ProjectID': check(project_table, 'ProjectID', 'id'),
+                       'Title': check(project_table, 'Title', 'name',
+                                      'Enter project name: '),
                        'Lead': f'{lead_username}',
                        'Member1': '',
                        'Member2': '',
                        'Advisor': '',
                        'Status': 'ongoing'}
 
-        # checking the existing projectID and store projectID
-        new_projectID = str(random.randint(1000000, 9999999))
-        while project_table.filter(
-                lambda x: x['ProjectID'] == new_projectID).table:
-            print('ID already taken generating new one')  # for easier debug
-            new_projectID = str(random.randint(1000000, 9999999))
-        new_project['ProjectID'] = new_projectID
-
-        # checking the existing name and store the name
-        new_title = random.choice(random_project_title)
-        while project_table.filter(lambda x: x['title'] == new_title).table:
-            print('Name already taken enter new one')  # for easier debug
-            new_title = random.choice(random_project_title)
-        new_project['Title'] = new_title
-
-        # Test before added
-        print(project_table, '\n')
+        # # Test before added
+        # print(project_table, '\n')
 
         # insert the new entry
         project_table.insert(new_project)
 
-        # Test after added
-        print(project_table, '\n')
+        # # Test after added
+        # print(project_table, '\n')
 
-    def lead(self, user_id):
+    def lead(self, user_id):  # super saiyan student
         """
         Use this student id to test
         'ID': '9898118'
@@ -242,10 +249,23 @@ class Student:
         :return:
         """
         self.id = user_id
-        print("What do you want to do")
-        print("1. Become lead")
-        print("2. Check member pending request")
+        print("What do you want to do\n"
+              "1. Send invitation to member/s\n"
+              "2. Modify project\n"
+              "3. Send request for advisor\n"
+              "4. Submit project for evaluation")
         choice = int(input("Pick a number: "))  # let user pick an action
+        if choice not in range(1, 5):  # check if input is within the option
+            raise ValueError("Not in choice")
+        if choice == 1:
+            pass
+
+    def send_invite(self, role):
+        # set variable of choice and table
+        choice = ''
+        filter_table = self.db.search("login").filter(lambda x: x[role]).table
+        while choice != 'q':
+            pass
 
     @property
     def db(self):
