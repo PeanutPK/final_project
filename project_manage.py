@@ -2,7 +2,7 @@
 from database import DB, Read, Table
 import csv
 import sys
-from Roles import Roles
+from Roles import Admin, Student
 
 my_db = DB()
 
@@ -65,17 +65,19 @@ def login():
 
 
 def run(value):
-    user = Roles(my_db)
     role = value[1]
-    userId = value[0]
+    userID = value[0]
     if role == 'admin':
+        user = Admin(my_db)
         user.admin()
     elif role == 'student':
-        user.student(userId)
+        user = Student(my_db)
+        user.student(userID)
     elif role == 'member':
         pass
     elif role == 'lead':
-        print("You are lead no program currently")
+        user = Student(my_db)
+        user.lead(userID)
     elif role == 'faculty':
         pass
     elif role == 'advisor':

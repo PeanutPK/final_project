@@ -3,15 +3,15 @@ import random
 # random project name generate by chatGPT
 # https://chat.openai.com/share/33dfe95e-e1bf-4c6e-973f-f789567ab5be
 random_project_title = ['QuantumHorizon', 'CipherCraft', 'NebulaForge',
-                       'VelocityVista', 'SynthSphere', 'LuminaLink',
-                       'PinnaclePulse', 'EchoEnigma', 'TerraTraverse',
-                       'ZenithZoom', 'AetherAscent', 'PixelPioneer',
-                       'CatalystCanvas', 'NovaNexis', 'ZenZone',
-                       'SerenitySync', 'QuantumQuasar', 'ApexAlly',
-                       'VortexVerve', 'NexusNurturer']
+                        'VelocityVista', 'SynthSphere', 'LuminaLink',
+                        'PinnaclePulse', 'EchoEnigma', 'TerraTraverse',
+                        'ZenithZoom', 'AetherAscent', 'PixelPioneer',
+                        'CatalystCanvas', 'NovaNexis', 'ZenZone',
+                        'SerenitySync', 'QuantumQuasar', 'ApexAlly',
+                        'VortexVerve', 'NexusNurturer']
 
 
-class Roles:
+class Admin:
     def __init__(self, database):
         self.__role = 'someone'
         self.__id = '9999999'
@@ -58,7 +58,8 @@ class Roles:
         # checking the existing id and store id
         new_ID = str(random.randint(1000000, 9999999))
         while persons_table.filter(lambda x: x['ID'] == new_ID).table:
-            print('ID already taken generating new one')  # for easier debug
+            print(
+                'ID already taken generating new one')  # for easier debug
             new_ID = str(random.randint(1000000, 9999999))
         new_persons['ID'] = new_ID
         new_login['ID'] = new_ID
@@ -78,12 +79,14 @@ class Roles:
         # checking the role and store the role
         new_Type = input("What is your type (admin, faculty, student): ")
         while new_Type not in ['admin', 'faculty', 'student']:
-            new_Type = input("What is your type (admin, faculty, student): ")
+            new_Type = input(
+                "What is your type (admin, faculty, student): ")
         new_persons['type'] = new_Type
         new_login['role'] = new_Type
 
         # choose password
-        new_login['password'] = int(input("Please choose 4 digits password: "))
+        new_login['password'] = int(
+            input("Please choose 4 digits password: "))
 
         # # Test before added
         # print(persons_table, '\n')
@@ -118,7 +121,8 @@ class Roles:
             if name_id['ID'] == delete_ID:
                 break
             num += 1
-        print(f"Are you sure you want to delete {reference_table.table[num]}")
+        print(
+            f"Are you sure you want to delete {reference_table.table[num]}")
         choice = input("(y/n): ")
         while choice not in ['y', 'n']:
             choice = input("Please enter 'y' or 'n': ")
@@ -149,6 +153,24 @@ class Roles:
             value = input("What is the value for changing: ")
             self.db.search(table).update(topic, check, key, value)
 
+    def show_table(self):
+        """
+        Showing all tables if someone wants
+        """
+        print("\nHere are the list of table")
+        for name_list in self.db.name:
+            print(f'- {name_list}')
+
+    @property
+    def db(self):
+        return self.__db
+
+
+class Student:
+    def __init__(self, database):
+        self.__id = '9999999'
+        self.__db = database
+
     def student(self, user_id):
         """
         Student can decide to become a member or lead
@@ -169,11 +191,6 @@ class Roles:
     def add_project(self):
         """
         Search and add dict to a table
-        Use this student id to test
-        'ID': '9898118'
-        'username': 'Lionel.M'
-        'password': '2977'
-        'role': 'student'
         """
         # make a variable to store the searched table
         project_table = self.db.search("project")
@@ -215,13 +232,20 @@ class Roles:
         # Test after added
         print(project_table, '\n')
 
-    def show_table(self):
+    def lead(self, user_id):
         """
-        Showing all tables if someone wants
+        Use this student id to test
+        'ID': '9898118'
+        'username': 'Lionel.M'
+        'password': '2977'
+        'role': 'lead'
+        :return:
         """
-        print("\nHere are the list of table")
-        for name_list in self.db.name:
-            print(f'- {name_list}')
+        self.id = user_id
+        print("What do you want to do")
+        print("1. Become lead")
+        print("2. Check member pending request")
+        choice = int(input("Pick a number: "))  # let user pick an action
 
     @property
     def db(self):
@@ -234,11 +258,3 @@ class Roles:
     @id.setter
     def id(self, value):
         self.__id = value
-
-    @property
-    def role(self):
-        return self.__role
-
-    @role.setter
-    def role(self, value):
-        self.__role = value
