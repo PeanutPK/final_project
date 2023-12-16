@@ -7,6 +7,9 @@ import copy
 
 
 class Read:
+    """
+    For reading csv files and use them in table
+    """
     def __init__(self, file):
         self.file = file
 
@@ -28,24 +31,37 @@ class Read:
 class DB:
     def __init__(self):
         self.__database = []
-
-    def insert(self, new_table):
-        self.__database.append(new_table)
+        self.__name = []
 
     def search(self, name):
-        for data in self.__database:
+        for data in self.database:
             if data.name == name:
                 return data
         print(f"No table name {name}. Please try again.")
         return None
 
+    def insert(self, new_table):
+        self.database.append(new_table)
+        self.name.append(new_table.name)
+
     def delete(self, table_delete):
         if self.search(table_delete) is not None:
-            self.__database.remove(table_delete)
+            self.database.remove(table_delete)
         self.search(table_delete)
 
+    @property
+    def database(self):
+        return self.__database
+
+    @property
+    def name(self):
+        return self.__name
+
+    def list(self):
+        return f"{self.name}"
+
     def __str__(self):
-        return f"{self.__database}"
+        return f"{self.database}"
 
 
 # add in code for a Table class
@@ -65,13 +81,6 @@ class Table:
                     print("You don't have permission to change admin status.")
                 else:
                     data[key] = value
-
-    def search(self, name):
-        for data in self.table:
-            if data == name:
-                return data
-        print(f"No table name {name}. Please try again.")
-        return None
 
     def insert(self, new_table):
         self.table.append(new_table)
@@ -94,24 +103,6 @@ class Table:
                 filtered_table.table.append(item1)
         return filtered_table
 
-    def __is_float(self, element):
-        if element is None:
-            return False
-        try:
-            float(element)
-            return True
-        except ValueError:
-            return False
-
-    def aggregate(self, function, aggregation_key):
-        temps = []
-        for item1 in self.table:
-            if self.__is_float(item1[aggregation_key]):
-                temps.append(float(item1[aggregation_key]))
-            else:
-                temps.append(item1[aggregation_key])
-        return function(temps)
-
     def select(self, attributes_list):
         temps = []
         for item1 in self.table:
@@ -126,13 +117,10 @@ class Table:
         _str = self.name
         num = 1
         for _dict in self.table:
-            _str += f'\n{num:<4}{_dict}'
+            number = str(num)+'.'
+            _str += f'\n{number:<4}{_dict}'
             num += 1
         return _str
-
-
-# modify the code in the Table class so that it supports the insert operation
-# where an entry can be added to a list of dictionary
 
 
 def test():
@@ -169,7 +157,9 @@ def test():
     print(my_DB.search('login'))
 
 
-test()
+if __name__ == "__main__":
+    test()
+
 # modify the code in the Table class so that it supports the insert operation
 # where an entry can be added to a list of dictionary
 

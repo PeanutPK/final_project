@@ -1,8 +1,9 @@
-# import database module
+# import files that I use in this code
 from database import DB, Read, Table
 import csv
+import sys
+import Roles
 
-# define a function called initializing
 my_db = DB()
 
 
@@ -17,18 +18,18 @@ def initializing():
     login_table = Table("login", login_t)
     project_table = Table("project", Read("Project.csv").readCSV())
     Advisor_pending_request_table = Table(
-        "advisor_pending_request", Read("Advisor_pending_request.csv").readCSV()
+        "advisor_pending_request",
+        Read("Advisor_pending_request.csv").readCSV()
     )
     Member_pending_request_table = Table(
         "member_pending_request", Read("Member_pending_request.csv").readCSV()
     )
 
     # Enable the line below to test the table
-    print(person_table)
     print(login_table)
-    print(project_table)
-    print(Advisor_pending_request_table)
-    print(Member_pending_request_table)
+    # print(project_table)
+    # print(Advisor_pending_request_table)
+    # print(Member_pending_request_table)
 
     # add tables to the database
     my_db.insert(person_table)
@@ -40,10 +41,12 @@ def initializing():
 
 def login():
     """
-    Using user id as a username and a password to enter to a certain role.
+    Using user's id and user's password to enter to a certain role.
+    If the user enters the invalid user id or password return, None
+    else return, [ID, role]
     :return:
     """
-    ID = str(input("Type in username: "))
+    ID = str(input("Type in userid: "))
     password_enter = str(input("Type in the password: "))
     my_login = my_db.search("login")
     my_user = my_login.table
@@ -51,18 +54,17 @@ def login():
         if data["ID"] == ID and data["password"] == password_enter:
             print(f"Welcome {data['username']}")
             print(f"Permission: {data['role']}")
-            return data
+            return [data['ID'], data['role']]
     print("Your username or password is wrong please try again.")
-
-
-# here are things to do in this function:
-# add code that performs a login task
-# ask a user for a username and password
-# returns [ID, role] if valid, otherwise returning None
 
 
 # define a function called exit
 def exit():
+    """
+    For exiting a program and update the csv files.
+    :return:
+    """
+    # update Project.csv
     myFile = open("Project.csv", "w")
     writer = csv.writer(myFile)
     writer.writerow(['ProjectID', 'Title',
@@ -73,16 +75,38 @@ def exit():
         writer.writerow(dictionary.values())
     myFile.close()
 
+    # update Advisor_pending_request.csv
+    myFile = open("Advisor_pending_request.csv", "w")
+    writer = csv.writer(myFile)
+    writer.writerow(['ProjectID', 'Advisor_request',
+                     'Response', 'Response_date'])
+    for dictionary in my_db.search('advisor_pending_request').table:
+        writer.writerow(dictionary.values())
+    myFile.close()
+
+    # update Member_pending_request.csv
+    myFile = open("Member_pending_request.csv", "w")
+    writer = csv.writer(myFile)
+    writer.writerow(['ProjectID', 'Member_request',
+                     'Response', 'Response_date'])
+    for dictionary in my_db.search('member_pending_request').table:
+        writer.writerow(dictionary.values())
+    myFile.close()
+
+    print('program ends')
+    sys.exit()
+
+
 # link for the code writing down back to csv files
 # https://www.pythonforbeginners.com/basics/list-of-dictionaries-to-csv-in-python
 
 
 # make calls to the initializing and login functions defined above
-
-initializing()
-val = login()
-print(val)
-# END part 1
+if __name__ == "__main__":
+    initializing()
+    val = login()
+    # run()
+    exit()
 
 # CONTINUE to part 2 (to be done for the next due date)
 
@@ -90,17 +114,14 @@ print(val)
 # performs activities according to the role defined for that person_id
 
 # if val[1] = 'admin':
-#   see and do admin related activities
+#    see and do admin related activities
 # elif val[1] = 'student':
-#   see and do student related activities
+#    see and do student related activities
 # elif val[1] = 'member':
-#   see and do member related activities
+#    see and do member related activities
 # elif val[1] = 'lead':
-#   see and do lead related activities
+#    see and do lead related activities
 # elif val[1] = 'faculty':
-#   see and do faculty related activities
+#    see and do faculty related activities
 # elif val[1] = 'advisor':
-#   see and do advisor related activities
-
-# once everyhthing is done, make a call to the exit function
-exit()
+#    see and do advisor related activities
