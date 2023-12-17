@@ -1,7 +1,7 @@
 # import files that I use in this code
 from database import DB, Read, Table
 import sys
-from Roles import Admin, Student, Faculty
+from Roles import Admin, Student, Faculty, update_all_csv
 from csv_keys import *
 
 my_db = DB()
@@ -55,8 +55,8 @@ def login():
     password_enter = str(input("Type in the password: "))
     for data in my_user:
         if data["username"] == username and data["password"] == password_enter:
-            print(f"Welcome {data['username']}")
-            print(f"Permission: {data['role']}")
+            print(f"\nWelcome {data['username']}")
+            print(f"Permission: {data['role']}\n")
             return [data['ID'], data['role']]
 
     # If username or password is/are wrong, run the program again
@@ -83,7 +83,8 @@ def run(value):
         user = Faculty(my_db, userID)
         user.faculty()
     elif role == 'advisor':
-        pass
+        user = Faculty(my_db, userID)
+        user.faculty()
 
 
 # define a function called exit
@@ -92,23 +93,7 @@ def exit():
     For exiting a program and update the csv files.
     :return:
     """
-    # update persons.csv
-    Read("persons.csv").update_csv('persons', person_key, my_db)
-
-    # update login.csv
-    Read("login.csv").update_csv('login', login_key, my_db)
-
-    # update Project.csv
-    Read("Project.csv").update_csv("project", project_key, my_db)
-
-    # update Advisor_pending_request.csv
-    Read("Advisor_pending_request.csv").update_csv("advisor_pending_request",
-                                                   advisor_key, my_db)
-
-    # update Member_pending_request.csv
-    Read("Member_pending_request.csv").update_csv("member_pending_request",
-                                                  member_key, my_db)
-
+    update_all_csv(my_db)
     print('\nprogram ends.........')
     sys.exit()
 

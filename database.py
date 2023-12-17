@@ -42,9 +42,6 @@ class Read:
         myFile.close()
 
 
-# add in code for a Database class
-
-
 class DB:
     def __init__(self):
         """
@@ -113,9 +110,6 @@ class DB:
         :return database:
         """
         return f"{self.database}"
-
-
-# add in code for a Table class
 
 
 class Table:
@@ -196,11 +190,22 @@ class Table:
         for printing out, the table doesn't perfect but usable
         :return:
         """
-        _str = self.name
+        print(self.name)
+        _str = ''
         num = 1
+
+        # print dict keys
+        _dict_key = self.table[0].keys()
+        print(f"{'num':<4}",end='')
+        for key in _dict_key:
+            print(f" | {key:>14}", end='')
+
         for _dict in self.table:
             number = str(num) + '.'
-            _str += f'\n{number:<4}{_dict}'
+            _string = ''
+            for i in _dict.values():
+                _string += f" | {i:>14}"
+            _str += f'\n{number:<4}{_string}'
             num += 1
         return _str
 

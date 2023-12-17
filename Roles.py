@@ -144,6 +144,7 @@ class Admin:
         reference_table = self.db.search("persons")
         delete_ID = input("Enter the ID you want to delete: ")
 
+        # Check value
         all_id = []
         for value in reference_table.table:
             all_id.append(value['ID'])
@@ -207,10 +208,12 @@ class Student:
     def __init__(self, database, user_id):
         self.__id = user_id
         self.__db = database
+
         # set username
         for ID in self.db.search("login").table:
             if ID['ID'] == self.id:
                 self.user_name = ID['username']
+
         # set project id
         for ID in self.db.search("project").table:
             if ((ID['Lead'] == self.user_name
@@ -285,7 +288,7 @@ class Student:
                            "3. Send request for advisor\n"
                            "4. Submit project for evaluation\n"
                            "5. Check status\n"
-                           "Pick a number or 'q' to exit: "))
+                           "Pick a number: "))
         if choice not in range(1, 6):  # check if input is within the option
             raise ValueError("Not in choice")
         if choice == 1:
@@ -301,7 +304,7 @@ class Student:
 
     def send_invite_member(self):
         """
-        Send invitation to student that doesn't belong in any project
+        Send an invitation to a student that doesn't belong in any project
         """
         # table for finding students
         student_table = self.db.search("login").filter(
@@ -314,7 +317,7 @@ class Student:
 
         # Make dict variable for inserting table
         request_invitation = {'ProjectID': self.projectID, 'Request': '',
-                              'Response': 'pending'}
+                              'Response': 'pending', 'Response_date': ''}
 
         # Store username of wanted user and
         # Print table of any users who unoccupied
@@ -343,53 +346,35 @@ class Student:
         """
         Send request for advisor
         """
-        # check condition first
-        pending_member = self.db.search("member_pending_request").filter(
-            lambda x: x['ProjectID'] == self.projectID)
-        pending_advisor = self.db.search("advisor_pending_request").filter(
-            lambda x: x['ProjectID'] == self.projectID)
-
-        if (pending_member.filter(lambda x: x['Response'] == 'pending').table
-                or pending_advisor.filter(
-                    lambda x: x['Response'] == 'pending').table):
-            print("There is still some pending request\n")
-            pass
-
-        # table for finding faculties
+        # make table for finding faculty and check pending
+        if self.db.search("advisor_pending_request").filter(
+                lambda x: x['ProjectID'] == self.projectID).table:
+            print("There is still some pending request "
+                  "or already have an advisor\n")
+            sys.exit()
         faculty_advisor_table = self.db.search("login").filter(
             lambda x: x['role'] in ['faculty', 'advisor'])
 
         # advisor table filter project
         advisor_table = self.db.search("advisor_pending_request")
-        advisor_table_filter = advisor_table.filter(
-            lambda x: x['ProjectID'] == self.projectID)
 
         # Make dict variable for inserting table
-        request_invitation = {'ProjectID': self.projectID, 'Request': '',
-                              'Response': 'pending'}
+        print(faculty_advisor_table)
+        request_invitation = {'ProjectID': self.projectID,
+                              'Request': input("Which username do you want "
+                                               "to send request to: "),
+                              'Response': 'pending', 'Response_date': ''}
 
         # Store username of wanted user and
         # Print table of any users who unoccupied
         print(faculty_advisor_table)
-        request_user = input("Which user id do you want "
-                             "to send request to: ")
-
-        # Check username already sent request or not
-        while advisor_table_filter.filter(
-                lambda x: x['Request'] == request_user).table:
-            print("Invalid user occupied or pending request")
-            request_user = input("Which username do you want to "
-                                 "send request to: ")
-        request_invitation['Request'] = request_user
 
         # send invitation
         print("\nInvitation sent......\n")
         advisor_table.insert(request_invitation)
 
         # update csv files to loop again
-        Read("Advisor_pending_request.csv").update_csv(
-            "advisor_pending_request",
-            advisor_key, self.db)
+        update_all_csv(self.db)
 
     def update_project(self):
         """
@@ -440,9 +425,10 @@ class Student:
             lambda x: x['ProjectID'] == self.projectID)
         print(project)
         approve = project.table[0].get('Status').count('A')
-        print(f"You currently have {approve} approve/s")
-        if approve >= 2:
+        if project.table[0]['Status'] == 'finished':
             print("Congratulation you project is finished")
+        else:
+            print(f"You currently have {approve} approve/s")
 
     def check_member_request(self):
         """
@@ -547,13 +533,20 @@ class Faculty:
                            "2. Evaluate projects\n"
                            "3. See all projects\n"
                            "Pick a number: "))
-        if choice not in range(1, 4):  # check if input is within the option
+
+        # check if input is within the option
+        if choice not in range(1, 4):
             raise ValueError("Not in choice")
+
+        # check advisor table
         if choice == 1:
-            # check advisor table
             self.check_faculty_request()
+
+        # evaluate project
         elif choice == 2:
-            pass
+            self.evaluate()
+
+        # show all project
         elif choice == 3:
             self.show_project_table()
 
@@ -571,13 +564,15 @@ class Faculty:
         print(user_request)
 
         # find project
-        choice = self.project_find()
+        choice = self.project_find_id_consider()
         acceptance = input("Do you want to\n"
                            "1. accept\n"
                            "2. decline\n"
                            "Pick a number: ")
+
         if acceptance == 1:
-            project_table.update('ProjectID', choice, 'Advisor', self.user_name)
+            project_table.update('ProjectID', choice, 'Advisor',
+                                 self.user_name)
 
             # update accepted project
             user_request.update('ProjectID', choice, 'Response', 'accepted')
@@ -585,6 +580,7 @@ class Faculty:
             # update role
             login_table.update('ID', self.id, 'role', 'advisor')
             print("updated table and role")
+
         elif acceptance == 2:
             # update declined project
             user_request.update('ProjectID', choice, 'Response', 'declined')
@@ -593,7 +589,10 @@ class Faculty:
             print("updated table")
         update_all_csv(self.db)
 
-    def project_find(self):
+    def project_find_id_consider(self):
+        """
+        Find project
+        """
         print('q for exit')
         choice = str(input("Which group ID do you want to "
                            "accept/decline the offer: "))
@@ -611,14 +610,61 @@ class Faculty:
         return choice
 
     def show_project_table(self):
+        """
+        Show all projects
+        """
         project_table = self.db.search("project")
         print(project_table)
 
     def evaluate(self):
+        """
+        Evaluation step:
+        1. Let faculties pick the project to evaluate and approve
+        2. Check the detail and vote for A (Approve) or D (Decline)
+        3. For the project to be complete requirement is 2 A
+        """
+        # print all projects selected only ID and Title
         print("These are the projects")
-        project_table = self.db.search("project")
-        print(project_table)
-        input("\nWhich table do you want to evaluate")
+        project_table = self.db.search("project").filter(
+            lambda x: x['Status'] not in ['ongoing', 'finished'])
+        project_title_id = project_table.select(['ProjectID', 'Title'])
+
+        # formatting print value
+        num = 1
+        for _dict in project_title_id:
+            str_num = str(num) + '.'
+            print(f"{str_num:<4} {_dict}")
+            num += 1
+        project_name = input("\nWhich project do you want to evaluate\n"
+                             "Choose the title: ")
+
+        # Take out only the dict of the table and
+        # show the name and detail of the project
+        evaluate_project = project_table.filter(
+            lambda x: x['Title'] == project_name).table[0]
+        print(f"Title:  {evaluate_project['Title']}\n"
+              f"Detail: {evaluate_project['Detail']}")
+
+        # Check faculty who evaluated the project
+        if self.user_name not in evaluate_project['Evaluator']:
+            evaluate_project['Evaluator'] += f"+{self.user_name}"
+
+        # Decide to approve or deny
+        choice = input("Do you A (Approve) or D (Decline): ")
+        while choice not in ['A', 'D']:
+            print("Type only A or D")
+            choice = input("Do you A (Approve) or D (Decline): ")
+
+        # Status checking
+        if evaluate_project['Status'] == 'pending':
+            evaluate_project['Status'] = choice
+        else:
+            evaluate_project['Status'] += choice
+        if evaluate_project['Status'].count('A') >= 2:
+            print("\n\nCongratulation your project is finished!!!")
+            print("🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉")
+
+            evaluate_project['Status'] = 'finished'
 
     @property
     def db(self):
