@@ -134,7 +134,7 @@ class Table:
         :param topic: What topic for checking
         :param check: Value to check the topic
         :param key: A key topic to change
-        :param value: Value of a topic that want to change
+        :param value: Value of a topic that wants to change
         """
         for data in self.table:
             if data[topic] == check:

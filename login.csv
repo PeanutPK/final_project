@@ -25,8 +25,8 @@ ID,username,password,role
 4720327,David.A,3861,faculty
 7525643,Henrikh.M,2636,faculty
 2472659,Karim.B,3828,faculty
-8197678,Test.S,5555,student
+8197678,Test.S,5555,member
 2358809,Test2.C,0000,lead
-3572922,Test.M,0000,student
+3572922,Test.M,0000,member
 1754654,Function.T,1234,lead
 1393292,9A.B,1111,student

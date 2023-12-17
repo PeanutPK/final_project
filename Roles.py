@@ -197,9 +197,9 @@ class Student:
         self.__db = database
         for ID in self.db.search("login").table:
             if ID['ID'] == self.id:
-                self.leader = ID['username']
+                self.user_name = ID['username']
         for ID in self.db.search("project").table:
-            if ID['Lead'] == self.leader:
+            if ID['Lead'] == self.user_name:
                 self.projectID = ID['ProjectID']
 
     def student(self, user_id):
@@ -228,7 +228,7 @@ class Student:
             # Proceed to lead program instead
             self.lead(self.id)
         elif choice == 2:
-            pass
+            self.check_member_request()
 
     def add_project(self):
         """
@@ -241,7 +241,7 @@ class Student:
         new_project = {'ProjectID': check(project_table, 'ProjectID', 'id'),
                        'Title': check(project_table, 'Title', 'name',
                                       'Enter project name: '),
-                       'Lead': f'{self.leader}',
+                       'Lead': f'{self.user_name}',
                        'Member1': '',
                        'Member2': '',
                        'Advisor': '',
@@ -289,6 +289,9 @@ class Student:
             self.check_stat()
 
     def send_invite_member(self):
+        """
+        Send invitation to student that doesn't belong in any project
+        """
         # table for finding students
         student_table = self.db.search("login").filter(
             lambda x: x['role'] == 'student')
@@ -300,7 +303,7 @@ class Student:
 
         # Make dict variable for inserting table
         request_invitation = {'ProjectID': self.projectID, 'Request': '',
-                              'Response': 'pending', 'Response_date': ''}
+                              'Response': 'pending'}
 
         # Store username of wanted user and
         # Print table of any users who unoccupied
@@ -326,6 +329,9 @@ class Student:
             member_key, self.db)
 
     def send_invite_advisor(self):
+        """
+        Send request for advisor
+        """
         # check condition first
         pending_member = self.db.search("member_pending_request").filter(
             lambda x: x['ProjectID'] == self.projectID)
@@ -336,7 +342,7 @@ class Student:
                 or pending_advisor.filter(
                     lambda x: x['Response'] == 'pending').table):
             print("There is still some pending request going back\n")
-            self.lead(self.projectID)
+            self.lead(self.id)
 
         # table for finding faculties
         faculty_advisor_table = self.db.search("login").filter(
@@ -349,7 +355,7 @@ class Student:
 
         # Make dict variable for inserting table
         request_invitation = {'ProjectID': self.projectID, 'Request': '',
-                              'Response': 'pending', 'Response_date': ''}
+                              'Response': 'pending'}
 
         # Store username of wanted user and
         # Print table of any users who unoccupied
@@ -375,20 +381,26 @@ class Student:
             advisor_key, self.db)
 
     def update_project(self):
+        """
+        Rename or change the detail of the project
+        """
         project_table = self.db.search("project")
         choice = input("Which one do you want to change\n"
                        "1. Name\n"
                        "2. Detail\n"
                        "Pick a number: ")
         if choice == 1:
-            check(project_table, 'Title', 'name',
-                  'Enter a new project name: ')
+            project_table['Title'] = check(project_table, 'Title', 'name',
+                                           'Enter a new project name: ')
         elif choice == 2:
             new = input("What is the new detail: ")
             project_table.update('ProjectID', self.projectID, 'Detail', new)
         Read("Project.csv").update_csv("project", project_key, self.db)
 
     def submit_project(self):
+        """
+        Submit project and change status to pending
+        """
         # check condition first
         pending_member = self.db.search("member_pending_request").filter(
             lambda x: x['ProjectID'] == self.projectID)
@@ -400,9 +412,9 @@ class Student:
                     lambda x: x['Response'] == 'pending').table
                 or not pending_advisor.filter(
                     lambda x: x['ProjectID'] == []).table):
-            print("There is still some pending request "
+            print("\nThere is still some pending request "
                   "or no advisor going back\n")
-            self.lead(self.projectID)
+            self.lead(self.id)
 
         # check status
         project_table = self.db.search('project').filter(
@@ -414,11 +426,78 @@ class Student:
         project_table.update('ProjectID', self.id, 'Status', 'pending')
 
     def check_stat(self):
+        """
+        Check the status for approval if > 2 then project complete
+        """
         project = self.db.search('project').filter(
             lambda x: x['ProjectID'] == self.projectID)
         print(project)
         approve = project.table[0].get('Status').count('A')
         print(f"You currently have {approve} approve/s")
+        if approve >= 2:
+            print("Congratulation you project is finished")
+
+    def check_member_request(self):
+        """
+        Check table and accept or quit
+        """
+        # Set variable for table
+        user_request = self.db.search("member_pending_request").filter(
+            lambda x: x['Request'] == self.user_name)
+        login_table = self.db.search("login")
+        project_table = self.db.search("project")
+
+        # Show table and ask for choice
+        print(user_request)
+        print("\nIf you don't want to pick yet and go back enter 'q'")
+
+        # Check input for choice
+        choice = str(input("Which group ID do you want to accept the offer: "))
+        if choice != 'q':
+            while not user_request.filter(lambda x: x['ProjectID'] == choice):
+                print(f"No ProjectID name {choice} try again")
+                choice = str(input("Which group ID do you "
+                                   "want to accept the offer: "))
+
+            # Check for an available seat in a group
+            # check Member1
+            if not project_table.filter(
+                    lambda x: x['ProjectID'] == choice).table[0]['Member1']:
+                project_table.update('ProjectID', choice,
+                                     'Member1', self.user_name)
+
+                # update accepted and declined projects
+                user_request.update('Request', self.user_name,
+                                    'Response', 'declined')
+                user_request.update('ProjectID', choice,
+                                    'Response', 'accepted')
+
+                # update role
+                login_table.update('ID', self.id, 'role', 'member')
+                print("updated a role")
+            # if Member1 is occupied
+            elif not project_table.filter(
+                    lambda x: x['ProjectID'] == choice).table[0]['Member2']:
+                project_table.update('ProjectID', choice,
+                                     'Member2', self.user_name)
+
+                # update accepted and declined projects
+                user_request.update('Request', self.user_name,
+                                    'Response', 'declined')
+                user_request.update('ProjectID', choice,
+                                    'Response', 'accepted')
+
+                # update role
+                login_table.update('ID', self.id, 'role', 'member')
+                print("updated a role")
+            else:  # in case a group is already full
+                print("Sorry the group is full")
+                user_request.update('ProjectID', choice,
+                                    'Response', 'cancel')
+
+        elif choice == 'q':
+            print("\ngoing back\n")
+            self.lead(self.user_name)
 
     @property
     def db(self):
