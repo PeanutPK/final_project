@@ -3,15 +3,15 @@
 
 1. **Student**
    - **general**
-     - [ ] Create project and become lead
-     - [ ] Accept an invitation link and become a member
+     - [x] Create project and become lead
+     - [x] Accept an invitation link and become a member then declined other
    - **Lead**
-     - [ ] Send an invitation link to students to become members
-     - [ ] Modify owned project name and detail
-     - [ ] Send request for advisor
-     - [ ] Submit project
+     - [x] Send an invitation link to students to become members
+     - [x] Modify owned project name and detail
+     - [x] Send request for advisor
+     - [x] Submit project
    - **Member**
-     - [ ] See only the project that you are in
+     - [x] See only the project that you are in
 2. **Faculty / Advisor**
    - [ ] Manage request see/accept/deny
    - [ ] Approves the project (At least two approvals)

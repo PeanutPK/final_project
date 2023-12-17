@@ -195,9 +195,11 @@ class Student:
     def __init__(self, database, user_id):
         self.__id = user_id
         self.__db = database
+        # set username
         for ID in self.db.search("login").table:
             if ID['ID'] == self.id:
                 self.user_name = ID['username']
+        # set project id
         for ID in self.db.search("project").table:
             if ((ID['Lead'] == self.user_name
                     or ID['Member1'] == self.user_name)
@@ -504,6 +506,32 @@ class Student:
     def member(self):
         print("\nThis is your project")
         self.check_stat()
+
+    @property
+    def db(self):
+        return self.__db
+
+    @property
+    def id(self):
+        return self.__id
+
+    @id.setter
+    def id(self, value):
+        self.__id = value
+
+
+class Faculty:
+    def __init__(self, database, user_id):
+        self.__id = user_id
+        self.__db = database
+        # set username
+        for ID in self.db.search("login").table:
+            if ID['ID'] == self.id:
+                self.user_name = ID['username']
+        # set project id
+        for ID in self.db.search("project").table:
+            if ID['Advisor'] == self.user_name:
+                self.projectID = ID['ProjectID']
 
     @property
     def db(self):
