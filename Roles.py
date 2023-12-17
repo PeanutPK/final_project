@@ -286,7 +286,7 @@ class Student:
         elif choice == 4:
             self.submit_project()
         elif choice == 5:
-            self
+            self.check_stat()
 
     def send_invite_member(self):
         # table for finding students
@@ -411,10 +411,14 @@ class Student:
                 lambda x: 'pending' in x['Status'] or
                           'approved' in x['Status']):
             print("You already submit the project\n")
-        project_table.update('ProjectID', self.id, 'Status', ['pending'])
+        project_table.update('ProjectID', self.id, 'Status', 'pending')
 
     def check_stat(self):
-        self.db.search('project')
+        project = self.db.search('project').filter(
+            lambda x: x['ProjectID'] == self.projectID)
+        print(project)
+        approve = project.table[0].get('Status').count('A')
+        print(f"You currently have {approve} approve/s")
 
     @property
     def db(self):
