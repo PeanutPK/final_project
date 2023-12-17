@@ -40,6 +40,16 @@ def check(table, topic, new_value_method, ask_message=''):
     return new
 
 
+def update_all_csv(my_db):
+    Read("persons.csv").update_csv('persons', person_key, my_db)
+    Read("login.csv").update_csv('login', login_key, my_db)
+    Read("Project.csv").update_csv("project", project_key, my_db)
+    Read("Advisor_pending_request.csv").update_csv("advisor_pending_request",
+                                                   advisor_key, my_db)
+    Read("Member_pending_request.csv").update_csv("member_pending_request",
+                                                  member_key, my_db)
+
+
 class Admin:
     def __init__(self, database):
         self.__role = 'someone'
@@ -51,11 +61,12 @@ class Admin:
         Admin is responsible for administering the database and manages users
         :return:
         """
-        print("What do you want to do as admin\n"
-              "1. Add entry\n"
-              "2. Remove entry\n"
-              "3. Update")
-        choice = int(input("Pick a number: "))  # let user pick an action
+        # let user pick an action
+        choice = int(input("What do you want to do as admin\n"
+                           "1. Add entry\n"
+                           "2. Remove entry\n"
+                           "3. Update\n"
+                           "Pick a number: "))
         if choice not in range(1, 4):  # check if input is within the option
             raise ValueError("Not in choice")
         # start the choice
@@ -177,6 +188,7 @@ class Admin:
             val_change = input("What is the value for changing: ")
             self.db.search(table).update(key_check, val_check,
                                          key_change, val_change)
+            update_all_csv(self.db)
 
     def show_table(self):
         """
@@ -202,20 +214,20 @@ class Student:
         # set project id
         for ID in self.db.search("project").table:
             if ((ID['Lead'] == self.user_name
-                    or ID['Member1'] == self.user_name)
+                 or ID['Member1'] == self.user_name)
                     or ID['Member2'] == self.user_name):
                 self.projectID = ID['ProjectID']
 
-    def student(self, user_id):
+    def student(self):
         """
         Student can decide to become a member or lead
         :return:
         """
-        self.id = user_id
-        print("What do you want to do as student\n"
-              "1. Become lead\n"
-              "2. Check member pending request")
-        choice = int(input("Pick a number: "))  # let user pick an action
+        # let user pick an action
+        choice = int(input("What do you want to do as student\n"
+                           "1. Become lead\n"
+                           "2. Check member pending request\n"
+                           "Pick a number or 'q' to exit: "))
         if choice not in range(1, 3):  # check if input is within the option
             raise ValueError("Not in choice")
         if choice == 1:
@@ -226,11 +238,11 @@ class Student:
             # update login csv and project csv
             Read("login.csv").update_csv('login', login_key, self.db)
             Read("Project.csv").update_csv("project", project_key, self.db)
-            print("Project added status changed to lead")
-            print()
+            print("Project added status changed to lead\n")
 
             # Proceed to lead program instead
-            self.lead(self.id)
+            print("Please login again to use lead")
+            sys.exit()
         elif choice == 2:
             self.check_member_request()
 
@@ -251,18 +263,13 @@ class Student:
                        'Advisor': '',
                        'Status': 'ongoing',
                        'Detail': input("What is your project detail: "),
-                       'Comment': ''}
-
-        # # Test before added
-        # print(project_table, '\n')
+                       'Comment': '',
+                       'Evaluator': ''}
 
         # insert the new entry
         project_table.insert(new_project)
 
-        # # Test after added
-        # print(project_table, '\n')
-
-    def lead(self, user_id):  # super saiyan student
+    def lead(self):  # super saiyan student
         """
         Use this student id to test
         'ID': '9898118'
@@ -271,14 +278,14 @@ class Student:
         'role': 'lead'
         :return:
         """
-        self.id = user_id
-        print("What do you want to do as lead\n"
-              "1. Send invitation to member/s\n"
-              "2. Change project name\n"
-              "3. Send request for advisor\n"
-              "4. Submit project for evaluation\n"
-              "5. Check status")
-        choice = int(input("Pick a number: "))  # let user pick an action
+        # let user pick an action
+        choice = int(input("What do you want to do as lead\n"
+                           "1. Send invitation to member/s\n"
+                           "2. Change project name\n"
+                           "3. Send request for advisor\n"
+                           "4. Submit project for evaluation\n"
+                           "5. Check status\n"
+                           "Pick a number or 'q' to exit: "))
         if choice not in range(1, 6):  # check if input is within the option
             raise ValueError("Not in choice")
         if choice == 1:
@@ -345,8 +352,8 @@ class Student:
         if (pending_member.filter(lambda x: x['Response'] == 'pending').table
                 or pending_advisor.filter(
                     lambda x: x['Response'] == 'pending').table):
-            print("There is still some pending request going back\n")
-            self.lead(self.id)
+            print("There is still some pending request\n")
+            pass
 
         # table for finding faculties
         faculty_advisor_table = self.db.search("login").filter(
@@ -413,12 +420,8 @@ class Student:
 
         if (pending_member.filter(lambda x: x['Response'] == 'pending').table
                 or pending_advisor.filter(
-                    lambda x: x['Response'] == 'pending').table
-                or not pending_advisor.filter(
-                    lambda x: x['ProjectID'] == []).table):
-            print("\nThere is still some pending request "
-                  "or no advisor going back\n")
-            self.lead(self.id)
+                    lambda x: x['Response'] == 'pending').table):
+            print("\nThere is still some pending request")
 
         # check status
         project_table = self.db.search('project').filter(
@@ -453,57 +456,60 @@ class Student:
 
         # Show table and ask for choice
         print(user_request)
-        print("\nIf you don't want to pick yet and go back enter 'q'")
 
         # Check input for choice
+        print('q for exit')
         choice = str(input("Which group ID do you want to accept the offer: "))
-        if choice != 'q':
-            while not user_request.filter(lambda x: x['ProjectID'] == choice):
-                print(f"No ProjectID name {choice} try again")
-                choice = str(input("Which group ID do you "
-                                   "want to accept the offer: "))
+        if choice == 'q':
+            sys.exit()
+        while not user_request.filter(lambda x: x['ProjectID'] == choice):
+            print(f"No ProjectID name {choice} try again\n")
+            print('q for exit')
+            choice = str(input("Which group ID do you "
+                               "want to accept the offer: "))
+            if choice == 'q':
+                sys.exit()
 
-            # Check for an available seat in a group
-            # check Member1
-            if not project_table.filter(
-                    lambda x: x['ProjectID'] == choice).table[0]['Member1']:
-                project_table.update('ProjectID', choice,
-                                     'Member1', self.user_name)
+        # Check for an available seat in a group
+        # check Member1
+        if not project_table.filter(
+                lambda x: x['ProjectID'] == choice).table[0]['Member1']:
+            project_table.update('ProjectID', choice,
+                                 'Member1', self.user_name)
 
-                # update accepted and declined projects
-                user_request.update('Request', self.user_name,
-                                    'Response', 'declined')
-                user_request.update('ProjectID', choice,
-                                    'Response', 'accepted')
+            # update accepted and declined projects
+            user_request.update('Request', self.user_name,
+                                'Response', 'declined')
+            user_request.update('ProjectID', choice,
+                                'Response', 'accepted')
 
-                # update role
-                login_table.update('ID', self.id, 'role', 'member')
-                print("updated a role")
-            # if Member1 is occupied
-            elif not project_table.filter(
-                    lambda x: x['ProjectID'] == choice).table[0]['Member2']:
-                project_table.update('ProjectID', choice,
-                                     'Member2', self.user_name)
+            # update role
+            login_table.update('ID', self.id, 'role', 'member')
+            print("updated a role")
+        # if Member1 is occupied
+        elif not project_table.filter(
+                lambda x: x['ProjectID'] == choice).table[0]['Member2']:
+            project_table.update('ProjectID', choice,
+                                 'Member2', self.user_name)
 
-                # update accepted and declined projects
-                user_request.update('Request', self.user_name,
-                                    'Response', 'declined')
-                user_request.update('ProjectID', choice,
-                                    'Response', 'accepted')
+            # update accepted and declined projects
+            user_request.update('Request', self.user_name,
+                                'Response', 'declined')
+            user_request.update('ProjectID', choice,
+                                'Response', 'accepted')
 
-                # update role
-                login_table.update('ID', self.id, 'role', 'member')
-                print("updated a role")
-            else:  # in case a group is already full
-                print("Sorry the group is full")
-                user_request.update('ProjectID', choice,
-                                    'Response', 'cancel')
-
-        elif choice == 'q':
-            print("\ngoing back\n")
-            self.lead(self.user_name)
+            # update role
+            login_table.update('ID', self.id, 'role', 'member')
+            print("updated a role")
+        else:  # in case a group is already full
+            print("Sorry the group is full")
+            user_request.update('ProjectID', choice,
+                                'Response', 'cancel')
 
     def member(self):
+        """
+        Member can only view the project
+        """
         print("\nThis is your project")
         self.check_stat()
 
@@ -528,10 +534,63 @@ class Faculty:
         for ID in self.db.search("login").table:
             if ID['ID'] == self.id:
                 self.user_name = ID['username']
-        # set project id
-        for ID in self.db.search("project").table:
-            if ID['Advisor'] == self.user_name:
-                self.projectID = ID['ProjectID']
+
+    def faculty(self):
+        """
+        Student can decide to become a member or lead
+        :return:
+        """
+        # let user pick an action
+        choice = int(input("What do you want to do as faculty\n"
+                           "1. Check advisor pending request\n"
+                           "2. Evaluate projects\n"
+                           "3. See all projects"
+                           "Pick a number: "))
+        if choice not in range(1, 3):  # check if input is within the option
+            raise ValueError("Not in choice")
+        elif choice == 1:
+            # check advisor table
+            self.check_faculty_request()
+
+    def check_faculty_request(self):
+        """
+        Check table and accept
+        """
+        # Set variable for table
+        user_request = self.db.search("advisor_pending_request").filter(
+            lambda x: x['Request'] == self.user_name)
+        login_table = self.db.search("login")
+        project_table = self.db.search("project")
+
+        # Show table and ask for choice
+        print(user_request)
+
+        # find project
+        choice = self.project_find()
+        project_table.update('ProjectID', choice, 'Advisor', self.user_name)
+
+        # update accepted project
+        user_request.update('ProjectID', choice, 'Response', 'accepted')
+
+        # update role
+        login_table.update('ID', self.id, 'role', 'advisor')
+        print("updated a role")
+
+    def project_find(self):
+        print('q for exit')
+        choice = str(input("Which group ID do you want to accept the offer: "))
+        if choice == 'q':
+            sys.exit()
+        user_request = self.db.search("advisor_pending_request").filter(
+            lambda x: x['Request'] == self.user_name)
+        while not user_request.filter(lambda x: x['ProjectID'] == choice):
+            print(f"No ProjectID name {choice} try again\n")
+            print('q for exit')
+            choice = str(input("Which group ID do you "
+                               "want to accept the offer: "))
+            if choice == 'q':
+                sys.exit()
+        return choice
 
     @property
     def db(self):

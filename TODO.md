@@ -19,4 +19,3 @@
    - [ ] Comment on the project (Evaluate projects)
 3. **Admin**
    - [x] Manage both database and table of persons and login (add or delete)
-

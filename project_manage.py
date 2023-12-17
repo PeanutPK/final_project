@@ -1,7 +1,7 @@
 # import files that I use in this code
 from database import DB, Read, Table
 import sys
-from Roles import Admin, Student
+from Roles import Admin, Student, Faculty
 from csv_keys import *
 
 my_db = DB()
@@ -72,15 +72,16 @@ def run(value):
         user.admin()
     elif role == 'student':
         user = Student(my_db, userID)
-        user.student(userID)
+        user.student()
     elif role == 'member':
         user = Student(my_db, userID)
         user.member()
     elif role == 'lead':
         user = Student(my_db, userID)
-        user.lead(userID)
+        user.lead()
     elif role == 'faculty':
-        pass
+        user = Faculty(my_db, userID)
+        user.faculty()
     elif role == 'advisor':
         pass
 
