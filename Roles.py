@@ -386,7 +386,7 @@ class Student:
         elif choice == 2:
             new = input("What is the new detail: ")
             project_table.update('ProjectID', self.projectID, 'Detail', new)
-        project_table.update()
+        Read("Project.csv").update_csv("project", project_key, self.db)
 
     def submit_project(self):
         # check condition first
