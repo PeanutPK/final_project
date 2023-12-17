@@ -505,6 +505,7 @@ class Student:
             print("Sorry the group is full")
             user_request.update('ProjectID', choice,
                                 'Response', 'cancel')
+        update_all_csv(self.db)
 
     def member(self):
         """
@@ -544,13 +545,17 @@ class Faculty:
         choice = int(input("What do you want to do as faculty\n"
                            "1. Check advisor pending request\n"
                            "2. Evaluate projects\n"
-                           "3. See all projects"
+                           "3. See all projects\n"
                            "Pick a number: "))
-        if choice not in range(1, 3):  # check if input is within the option
+        if choice not in range(1, 4):  # check if input is within the option
             raise ValueError("Not in choice")
-        elif choice == 1:
+        if choice == 1:
             # check advisor table
             self.check_faculty_request()
+        elif choice == 2:
+            pass
+        elif choice == 3:
+            self.show_project_table()
 
     def check_faculty_request(self):
         """
@@ -567,18 +572,31 @@ class Faculty:
 
         # find project
         choice = self.project_find()
-        project_table.update('ProjectID', choice, 'Advisor', self.user_name)
+        acceptance = input("Do you want to\n"
+                           "1. accept\n"
+                           "2. decline\n"
+                           "Pick a number: ")
+        if acceptance == 1:
+            project_table.update('ProjectID', choice, 'Advisor', self.user_name)
 
-        # update accepted project
-        user_request.update('ProjectID', choice, 'Response', 'accepted')
+            # update accepted project
+            user_request.update('ProjectID', choice, 'Response', 'accepted')
 
-        # update role
-        login_table.update('ID', self.id, 'role', 'advisor')
-        print("updated a role")
+            # update role
+            login_table.update('ID', self.id, 'role', 'advisor')
+            print("updated table and role")
+        elif acceptance == 2:
+            # update declined project
+            user_request.update('ProjectID', choice, 'Response', 'declined')
+
+            # update table
+            print("updated table")
+        update_all_csv(self.db)
 
     def project_find(self):
         print('q for exit')
-        choice = str(input("Which group ID do you want to accept the offer: "))
+        choice = str(input("Which group ID do you want to "
+                           "accept/decline the offer: "))
         if choice == 'q':
             sys.exit()
         user_request = self.db.search("advisor_pending_request").filter(
@@ -586,11 +604,21 @@ class Faculty:
         while not user_request.filter(lambda x: x['ProjectID'] == choice):
             print(f"No ProjectID name {choice} try again\n")
             print('q for exit')
-            choice = str(input("Which group ID do you "
-                               "want to accept the offer: "))
+            choice = str(input("Which group ID do you want "
+                               "to accept/decline the offer: "))
             if choice == 'q':
                 sys.exit()
         return choice
+
+    def show_project_table(self):
+        project_table = self.db.search("project")
+        print(project_table)
+
+    def evaluate(self):
+        print("These are the projects")
+        project_table = self.db.search("project")
+        print(project_table)
+        input("\nWhich table do you want to evaluate")
 
     @property
     def db(self):

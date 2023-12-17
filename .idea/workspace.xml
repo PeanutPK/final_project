@@ -4,14 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="850c8cb5-8854-46a5-ac25-7c7a6917af87" name="Changes" comment="Finished student class might be more efficient in the future">
+    <list default="true" id="850c8cb5-8854-46a5-ac25-7c7a6917af87" name="Changes" comment="Start faculty">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Advisor_pending_request.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Advisor_pending_request.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Project.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Project.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Roles.py" beforeDir="false" afterPath="$PROJECT_DIR$/Roles.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TODO.md" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/csv_keys.py" beforeDir="false" afterPath="$PROJECT_DIR$/csv_keys.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project_manage.py" beforeDir="false" afterPath="$PROJECT_DIR$/project_manage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login.csv" beforeDir="false" afterPath="$PROJECT_DIR$/login.csv" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -313,7 +311,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702807112945</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Start faculty">
+      <option name="closed" value="true" />
+      <created>1702812989773</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1702812989773</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -338,6 +344,7 @@
     <MESSAGE value="Finished average student" />
     <MESSAGE value="Finished student class" />
     <MESSAGE value="Finished student class might be more efficient in the future" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished student class might be more efficient in the future" />
+    <MESSAGE value="Start faculty" />
+    <option name="LAST_COMMIT_MESSAGE" value="Start faculty" />
   </component>
 </project>
