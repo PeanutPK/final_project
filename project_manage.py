@@ -1,8 +1,8 @@
 # import files that I use in this code
 from database import DB, Read, Table
-import csv
 import sys
 from Roles import Admin, Student
+from csv_keys import *
 
 my_db = DB()
 
@@ -71,12 +71,12 @@ def run(value):
         user = Admin(my_db)
         user.admin()
     elif role == 'student':
-        user = Student(my_db)
+        user = Student(my_db, userID)
         user.student(userID)
     elif role == 'member':
         pass
     elif role == 'lead':
-        user = Student(my_db)
+        user = Student(my_db, userID)
         user.lead(userID)
     elif role == 'faculty':
         pass
@@ -91,49 +91,21 @@ def exit():
     :return:
     """
     # update persons.csv
-    myFile = open("persons.csv", "w")
-    writer = csv.writer(myFile)
-    writer.writerow(['ID', 'first', 'last', 'type'])
-    for dictionary in my_db.search('persons').table:
-        writer.writerow(dictionary.values())
-    myFile.close()
+    Read("persons.csv").update_csv('persons', person_key, my_db)
 
     # update login.csv
-    myFile = open("login.csv", "w")
-    writer = csv.writer(myFile)
-    writer.writerow(['ID', 'username', 'password', 'role'])
-    for dictionary in my_db.search('login').table:
-        writer.writerow(dictionary.values())
-    myFile.close()
+    Read("login.csv").update_csv('login', login_key, my_db)
 
     # update Project.csv
-    myFile = open("Project.csv", "w")
-    writer = csv.writer(myFile)
-    writer.writerow(['ProjectID', 'Title',
-                     'Lead', 'Member1',
-                     'Member2', 'Advisor',
-                     'Status'])
-    for dictionary in my_db.search('project').table:
-        writer.writerow(dictionary.values())
-    myFile.close()
+    Read("Project.csv").update_csv("project", project_key, my_db)
 
     # update Advisor_pending_request.csv
-    myFile = open("Advisor_pending_request.csv", "w")
-    writer = csv.writer(myFile)
-    writer.writerow(['ProjectID', 'Advisor_request',
-                     'Response', 'Response_date'])
-    for dictionary in my_db.search('advisor_pending_request').table:
-        writer.writerow(dictionary.values())
-    myFile.close()
+    Read("Advisor_pending_request.csv").update_csv("advisor_pending_request",
+                                                   advisor_key, my_db)
 
     # update Member_pending_request.csv
-    myFile = open("Member_pending_request.csv", "w")
-    writer = csv.writer(myFile)
-    writer.writerow(['ProjectID', 'Member_request',
-                     'Response', 'Response_date'])
-    for dictionary in my_db.search('member_pending_request').table:
-        writer.writerow(dictionary.values())
-    myFile.close()
+    Read("Member_pending_request.csv").update_csv("member_pending_request",
+                                                  member_key, my_db)
 
     print('\nprogram ends.........')
     sys.exit()
@@ -142,28 +114,8 @@ def exit():
 # link for the code writing down back to csv files
 # https://www.pythonforbeginners.com/basics/list-of-dictionaries-to-csv-in-python
 
-
-# make calls to the initializing and login functions defined above
 if __name__ == "__main__":
     initializing()
     val = login()
     run(val)
     exit()
-
-# CONTINUE to part 2 (to be done for the next due date)
-
-# based on the return value for login, activate the code that
-# performs activities according to the role defined for that person_id
-
-# if val[1] = 'admin':
-#    see and do admin related activities
-# elif val[1] = 'student':
-#    see and do student related activities
-# elif val[1] = 'member':
-#    see and do member related activities
-# elif val[1] = 'lead':
-#    see and do lead related activities
-# elif val[1] = 'faculty':
-#    see and do faculty related activities
-# elif val[1] = 'advisor':
-#    see and do advisor related activities

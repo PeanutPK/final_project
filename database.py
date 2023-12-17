@@ -33,6 +33,14 @@ class Read:
                 _list.append(dict(row))
         return _list
 
+    def update_csv(self, table_name: str, key_list: list, my_db):
+        myFile = open(self.file, "w")
+        writer = csv.writer(myFile)
+        writer.writerow(key_list)
+        for dictionary in my_db.search(table_name).table:
+            writer.writerow(dictionary.values())
+        myFile.close()
+
 
 # add in code for a Database class
 

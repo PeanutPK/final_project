@@ -1,4 +1,7 @@
 import random
+import sys
+from database import Read
+from csv_keys import *
 
 # random project name generate by chatGPT
 # https://chat.openai.com/share/33dfe95e-e1bf-4c6e-973f-f789567ab5be
@@ -48,7 +51,7 @@ class Admin:
         Admin is responsible for administering the database and manages users
         :return:
         """
-        print("What do you want to do\n"
+        print("What do you want to do as admin\n"
               "1. Add entry\n"
               "2. Remove entry\n"
               "3. Update")
@@ -168,11 +171,12 @@ class Admin:
                 table = input("Which table do you want to change: ")
 
             # assign all variables must be correct
-            topic = input("What is the topic for checking: ")
-            check = input("What is the value for checking: ")
-            key = input("What is the key for changing: ")
-            value = input("What is the value for changing: ")
-            self.db.search(table).update(topic, check, key, value)
+            key_check = input("What is the key for checking: ")
+            val_check = input("What is the value for checking: ")
+            key_change = input("What is the key for changing: ")
+            val_change = input("What is the value for changing: ")
+            self.db.search(table).update(key_check, val_check,
+                                         key_change, val_change)
 
     def show_table(self):
         """
@@ -188,9 +192,15 @@ class Admin:
 
 
 class Student:
-    def __init__(self, database):
-        self.__id = '9999999'
+    def __init__(self, database, user_id):
+        self.__id = user_id
         self.__db = database
+        for ID in self.db.search("login").table:
+            if ID['ID'] == self.id:
+                self._leader = ID['username']
+        for ID in self.db.search("project").table:
+            if ID['Lead'] == self.leader:
+                self._projectID = ID['ProjectID']
 
     def student(self, user_id):
         """
@@ -198,7 +208,7 @@ class Student:
         :return:
         """
         self.id = user_id
-        print("What do you want to do\n"
+        print("What do you want to do as student\n"
               "1. Become lead\n"
               "2. Check member pending request")
         choice = int(input("Pick a number: "))  # let user pick an action
@@ -209,22 +219,27 @@ class Student:
             self.db.search('login').update('ID', self.id, 'role', 'lead')
             self.add_project()
 
+            # update login csv and project csv
+            Read("login.csv").update_csv('login', login_key, self.db)
+            Read("Project.csv").update_csv("project", project_key, self.db)
+            print("Project added status changed to lead")
+            print()
+
+            # Proceed to lead program instead
+            self.lead(self.id)
+
     def add_project(self):
         """
         Search and add dict to a table
         """
         # make a variable to store the searched table
         project_table = self.db.search("project")
-        lead_username = ''
-        for ID in self.db.search("login").table:
-            if ID['ID'] == self.id:
-                lead_username = ID['username']
 
         # making a dict for adding new entry for persons and login
         new_project = {'ProjectID': check(project_table, 'ProjectID', 'id'),
                        'Title': check(project_table, 'Title', 'name',
                                       'Enter project name: '),
-                       'Lead': f'{lead_username}',
+                       'Lead': f'{self.leader}',
                        'Member1': '',
                        'Member2': '',
                        'Advisor': '',
@@ -249,7 +264,7 @@ class Student:
         :return:
         """
         self.id = user_id
-        print("What do you want to do\n"
+        print("What do you want to do as lead\n"
               "1. Send invitation to member/s\n"
               "2. Modify project\n"
               "3. Send request for advisor\n"
@@ -258,14 +273,39 @@ class Student:
         if choice not in range(1, 5):  # check if input is within the option
             raise ValueError("Not in choice")
         if choice == 1:
-            pass
+            self.send_invite('student')
 
     def send_invite(self, role):
         # set variable of choice and table
         choice = ''
-        filter_table = self.db.search("login").filter(lambda x: x[role]).table
+        filter_table = self.db.search("login").filter(
+            lambda x: x['role'] == role)
+
+        # member table filter project
+        member_table = self.db.search("member_pending_request")
+        member_table_filter = member_table.filter(
+            lambda x: x['ProjectID'] == self._projectID)
+
+        # advisor table filter project
+        advisor_table = self.db.search("advisor_pending_request")
+        advisor_table_filter = advisor_table.filter(
+            lambda x: x['ProjectID'] == self._projectID)
+
+        # loop until quit
         while choice != 'q':
-            pass
+            print(filter_table)
+            request = input("Which username do you want to send request to: ")
+            request_invitation = {'ProjectID': '', 'Request': '',
+                                  'Response': '', 'Response_date': ''}
+            if role == 'student':
+                # Check already sent request or not
+                while member_table_filter.filter(
+                        lambda x: x['Member_request'] == request).table:
+                    request = input("Which username do you want to "
+                                    "send request to: ")
+                request_invitation['Request'] = request
+            choice = input("Do you want to stop 'q': ")
+        sys.exit()
 
     @property
     def db(self):
@@ -278,3 +318,11 @@ class Student:
     @id.setter
     def id(self, value):
         self.__id = value
+
+    @property
+    def leader(self):
+        return self._leader
+
+    @property
+    def projectID(self):
+        return self._projectID

@@ -1,4 +1,5 @@
 ID,username,password,role
+6159873,PK,0000,admin
 7447677,Cristiano.R,2255,admin
 9898118,Lionel.M,2977,lead
 5662557,Manuel.N,1244,lead
@@ -26,3 +27,5 @@ ID,username,password,role
 2472659,Karim.B,3828,faculty
 8197678,Test.S,5555,student
 2358809,Test2.C,0000,lead
+3572922,Test.M,0000,student
+1754654,Function.T,1234,lead
