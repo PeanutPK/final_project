@@ -2,6 +2,7 @@ import random
 import sys
 from database import Read
 from csv_keys import *
+from datetime import date
 
 # random project name generate by chatGPT
 # https://chat.openai.com/share/33dfe95e-e1bf-4c6e-973f-f789567ab5be
@@ -242,10 +243,11 @@ class Student:
             Read("login.csv").update_csv('login', login_key, self.db)
             Read("Project.csv").update_csv("project", project_key, self.db)
             print("Project added status changed to lead\n")
+            update_all_csv(self.db)
 
             # Proceed to lead program instead
             print("Please login again to use lead")
-            sys.exit()
+            return
         elif choice == 2:
             self.check_member_request()
 
@@ -351,7 +353,7 @@ class Student:
                 lambda x: x['ProjectID'] == self.projectID).table:
             print("There is still some pending request "
                   "or already have an advisor\n")
-            sys.exit()
+            return
         faculty_advisor_table = self.db.search("login").filter(
             lambda x: x['role'] in ['faculty', 'advisor'])
 
@@ -440,6 +442,9 @@ class Student:
         login_table = self.db.search("login")
         project_table = self.db.search("project")
 
+        # Get the current date from the internet
+        current_date = date.today().strftime("%Y/%m/%d")
+
         # Show table and ask for choice
         print(user_request)
 
@@ -447,14 +452,14 @@ class Student:
         print('q for exit')
         choice = str(input("Which group ID do you want to accept the offer: "))
         if choice == 'q':
-            sys.exit()
+            return
         while not user_request.filter(lambda x: x['ProjectID'] == choice):
             print(f"No ProjectID name {choice} try again\n")
             print('q for exit')
             choice = str(input("Which group ID do you "
                                "want to accept the offer: "))
             if choice == 'q':
-                sys.exit()
+                return
 
         # Check for an available seat in a group
         # check Member1
@@ -472,6 +477,7 @@ class Student:
             # update role
             login_table.update('ID', self.id, 'role', 'member')
             print("updated a role")
+
         # if Member1 is occupied
         elif not project_table.filter(
                 lambda x: x['ProjectID'] == choice).table[0]['Member2']:
@@ -487,10 +493,14 @@ class Student:
             # update role
             login_table.update('ID', self.id, 'role', 'member')
             print("updated a role")
+
         else:  # in case a group is already full
             print("Sorry the group is full")
             user_request.update('ProjectID', choice,
                                 'Response', 'cancel')
+
+        user_request.update('ProjectID', choice,
+                            'Response_date', [current_date])
         update_all_csv(self.db)
 
     def member(self):
@@ -563,6 +573,9 @@ class Faculty:
         # Show table and ask for choice
         print(user_request)
 
+        # Get the current date from the internet
+        current_date = date.today().strftime("%Y/%m/%d")
+
         # find project
         choice = self.project_find_id_consider()
         acceptance = input("Do you want to\n"
@@ -587,6 +600,9 @@ class Faculty:
 
             # update table
             print("updated table")
+
+        user_request.update('ProjectID', choice,
+                            'Response_date', [current_date])
         update_all_csv(self.db)
 
     def project_find_id_consider(self):
@@ -597,7 +613,7 @@ class Faculty:
         choice = str(input("Which group ID do you want to "
                            "accept/decline the offer: "))
         if choice == 'q':
-            sys.exit()
+            return
         user_request = self.db.search("advisor_pending_request").filter(
             lambda x: x['Request'] == self.user_name)
         while not user_request.filter(lambda x: x['ProjectID'] == choice):
@@ -606,7 +622,7 @@ class Faculty:
             choice = str(input("Which group ID do you want "
                                "to accept/decline the offer: "))
             if choice == 'q':
-                sys.exit()
+                return
         return choice
 
     def show_project_table(self):
@@ -637,6 +653,12 @@ class Faculty:
             num += 1
         project_name = input("\nWhich project do you want to evaluate\n"
                              "Choose the title: ")
+
+        # Check a duplicate vote or not
+        if self.db.search("project").filter(
+                lambda x: self.user_name in x['Evaluator']).table:
+            print("\nYou already evaluate this project no cheat")
+            return
 
         # Take out only the dict of the table and
         # show the name and detail of the project

@@ -103,6 +103,9 @@ def exit():
 
 if __name__ == "__main__":
     initializing()
+    stop = ''
     val = login()
-    run(val)
+    while stop != 'n':
+        run(val)
+        stop = input('\nContinue? (y/n): \n')
     exit()
