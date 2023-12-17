@@ -3,7 +3,7 @@ ID,username,password,role
 7447677,Cristiano.R,2255,admin
 9898118,Lionel.M,2977,lead
 5662557,Manuel.N,1244,lead
-5687866,Robert.L,8176,student
+5687866,Robert.L,8176,lead
 3557832,Gareth.B,9462,student
 2592572,Thibaut.C,1985,student
 1554306,Eden.H,9106,student
@@ -29,3 +29,4 @@ ID,username,password,role
 2358809,Test2.C,0000,lead
 3572922,Test.M,0000,student
 1754654,Function.T,1234,lead
+1393292,9A.B,1111,student

@@ -4,14 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="850c8cb5-8854-46a5-ac25-7c7a6917af87" name="Changes" comment="Apply new check function to some class function and tested">
-      <change afterPath="$PROJECT_DIR$/csv_keys.py" afterDir="false" />
+    <list default="true" id="850c8cb5-8854-46a5-ac25-7c7a6917af87" name="Changes" comment="Commit just in case">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Advisor_pending_request.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Advisor_pending_request.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Member_pending_request.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Member_pending_request.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Project.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Roles.py" beforeDir="false" afterPath="$PROJECT_DIR$/Roles.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/csv_keys.py" beforeDir="false" afterPath="$PROJECT_DIR$/csv_keys.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/login.csv" beforeDir="false" afterPath="$PROJECT_DIR$/login.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/persons.csv" beforeDir="false" afterPath="$PROJECT_DIR$/persons.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project_manage.py" beforeDir="false" afterPath="$PROJECT_DIR$/project_manage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -249,7 +250,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702750179805</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Commit just in case">
+      <option name="closed" value="true" />
+      <created>1702787316716</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1702787316716</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -266,6 +275,7 @@
     <MESSAGE value="Student to lead and create project" />
     <MESSAGE value="Seperate Admin and Student to two class" />
     <MESSAGE value="Apply new check function to some class function and tested" />
-    <option name="LAST_COMMIT_MESSAGE" value="Apply new check function to some class function and tested" />
+    <MESSAGE value="Commit just in case" />
+    <option name="LAST_COMMIT_MESSAGE" value="Commit just in case" />
   </component>
 </project>

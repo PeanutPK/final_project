@@ -1,5 +1,6 @@
-ProjectID,Title,Lead,Member1,Member2,Advisor,Status
-4441971,ZenZone,Lionel.M,,,,ongoing
-7601734,CatalystCanvas,Manuel.N,,,,ongoing
-3802967,QuantumHorizon,Test2.C,,,,ongoing
-6378452,VelocityVista,Function.T,,,,ongoing
+ProjectID,Title,Lead,Member1,Member2,Advisor,Status,Detail,Comment
+4441971,ZenZone,Lionel.M,,,,ongoing,A,
+7601734,CatalystCanvas,Manuel.N,,,,ongoing,A,
+3802967,QuantumHorizon,Test2.C,,,,ongoing,A,
+6378452,VelocityVista,Function.T,,,,ongoing,A,
+3099440,Test,Robert.L,,,,['pending'],just test,

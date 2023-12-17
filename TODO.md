@@ -7,7 +7,7 @@
      - [ ] Accept an invitation link and become a member
    - **Lead**
      - [ ] Send an invitation link to students to become members
-     - [ ] Modify owned project
+     - [ ] Modify owned project name and detail
      - [ ] Send request for advisor
      - [ ] Submit project
    - **Member**
