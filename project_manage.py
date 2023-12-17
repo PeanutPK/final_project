@@ -74,7 +74,8 @@ def run(value):
         user = Student(my_db, userID)
         user.student(userID)
     elif role == 'member':
-        pass
+        user = Student(my_db, userID)
+        user.member()
     elif role == 'lead':
         user = Student(my_db, userID)
         user.lead(userID)

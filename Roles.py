@@ -199,7 +199,9 @@ class Student:
             if ID['ID'] == self.id:
                 self.user_name = ID['username']
         for ID in self.db.search("project").table:
-            if ID['Lead'] == self.user_name:
+            if ((ID['Lead'] == self.user_name
+                    or ID['Member1'] == self.user_name)
+                    or ID['Member2'] == self.user_name):
                 self.projectID = ID['ProjectID']
 
     def student(self, user_id):
@@ -498,6 +500,10 @@ class Student:
         elif choice == 'q':
             print("\ngoing back\n")
             self.lead(self.user_name)
+
+    def member(self):
+        print("\nThis is your project")
+        self.check_stat()
 
     @property
     def db(self):
