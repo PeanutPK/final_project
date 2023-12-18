@@ -201,18 +201,17 @@ class Table:
         """
         print(self.name)
         _str = ''
-        num = 1
 
         # print dict keys
         _dict_key = self.table[0].keys()
-        print(f"{'num':<4}", end='')
-        for key in _dict_key:
-            print(f" | {key:>14}", end='')
+        header = f"{'num':<4}" + " | ".join(f"{key:>14}" for key in _dict_key)
+        print(header)
 
         for num, _dict in enumerate(self.table, start=1):
             values = [f"{i:>14}" for i in _dict.values()]
             _string = " | ".join(values)
-            _str += f'\n{num:<4}{_string}'
+            print(f"{num:<4}{_string}")
+
         return _str
 
 
