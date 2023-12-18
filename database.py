@@ -37,15 +37,18 @@ class Read:
         """
         Update a csv file
         """
-        myFile = open(self.file, "w", encoding='UTF-8')
-        writer = csv.writer(myFile)
-        writer.writerow(key_list)
-        for dictionary in my_db.search(table_name).table:
-            writer.writerow(dictionary.values())
-        myFile.close()
+        with open(self.file, "w", encoding='UTF-8') as my_file:
+            writer = csv.writer(my_file)
+            writer.writerow(key_list)
+            for dictionary in my_db.search(table_name).table:
+                writer.writerow(dictionary.values())
+            my_file.close()
 
 
 class DB:
+    """
+    Class for a database (list of table)
+    """
     def __init__(self):
         """
         Initialize value to database
@@ -116,6 +119,9 @@ class DB:
 
 
 class Table:
+    """
+    Class for table (list of dict)
+    """
     def __init__(self, name, table):
         """
         Initialize attribute for table
@@ -203,13 +209,10 @@ class Table:
         for key in _dict_key:
             print(f" | {key:>14}", end='')
 
-        for _dict in self.table:
-            number = str(num) + '.'
-            _string = ''
-            for i in _dict.values():
-                _string += f" | {i:>14}"
-            _str += f'\n{number:<4}{_string}'
-            num += 1
+        for num, _dict in enumerate(self.table, start=1):
+            values = [f"{i:>14}" for i in _dict.values()]
+            _string = " | ".join(values)
+            _str += f'\n{num:<4}{_string}'
         return _str
 
 

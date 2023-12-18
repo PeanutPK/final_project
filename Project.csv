@@ -5,3 +5,4 @@ ProjectID,Title,Lead,Member1,Member2,Advisor,Status,Detail,Comment,Evaluator
 6378452,VelocityVista,Function.T,Test.M,Test.S,,ongoing,detau,,
 3099440,Test,Robert.L,,,,finished,just test,,Arjen.R+Karim.B
 6278963,AetherAscent,Gareth.B,9A.B,,,pending,Heaven,,
+7179270,Last minute,Leonardo.B,,,,ongoing,Final test after pylint,,

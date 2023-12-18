@@ -102,3 +102,7 @@
 |                 | 3. For the project to be complete requirement is 2 A                             |                          |         |            |
 | faculty/advisor | Show all projects                                                                | show_project_table       | Faculty |       100% |
 
+
+* **Missing function**
+    - I don't know what else to write, probably none
+    - When I tested it there are no bugs
