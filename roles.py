@@ -1,8 +1,8 @@
+"""This roles.py contains all role class for uses in project_manage.py"""
 import random
 import sys
-from database import Read
-from csv_keys import *
 from datetime import date
+from database import Read
 
 # random project name generate by chatGPT
 # https://chat.openai.com/share/33dfe95e-e1bf-4c6e-973f-f789567ab5be
@@ -13,6 +13,14 @@ random_project_title = ['QuantumHorizon', 'CipherCraft', 'NebulaForge',
                         'CatalystCanvas', 'NovaNexis', 'ZenZone',
                         'SerenitySync', 'QuantumQuasar', 'ApexAlly',
                         'VortexVerve', 'NexusNurturer']
+
+# keys for each csv file
+person_key = ['ID', 'first', 'last', 'type']
+login_key = ['ID', 'username', 'password', 'role']
+project_key = ['ProjectID', 'Title', 'Lead', 'Member1', 'Member2', 'Advisor',
+               'Status', 'Detail', 'Comment', 'Evaluator']
+advisor_key = ['ProjectID', 'Request', 'Response', 'Response_date']
+member_key = ['ProjectID', 'Request', 'Response', 'Response_date']
 
 
 def check(table, topic, new_value_method, ask_message=''):
@@ -33,7 +41,7 @@ def check(table, topic, new_value_method, ask_message=''):
         new = str(random.randint(1000000, 9999999))
     # incase duplicate
     while table.filter(lambda x: x[topic] == new).table:
-        print(f"Your input has already taken try again")  # for easier debug
+        print("Your input has already taken try again")
         if new_value_method == 'name':  # normal string input
             new = input(f"{ask_message}")
         elif new_value_method == 'id':  # random id
@@ -42,6 +50,9 @@ def check(table, topic, new_value_method, ask_message=''):
 
 
 def update_all_csv(my_db):
+    """
+    Read and update all csv files
+    """
     Read("persons.csv").update_csv('persons', person_key, my_db)
     Read("login.csv").update_csv('login', login_key, my_db)
     Read("Project.csv").update_csv("project", project_key, my_db)
@@ -52,9 +63,11 @@ def update_all_csv(my_db):
 
 
 class Admin:
+    """
+    This class is for admin type
+    """
+
     def __init__(self, database):
-        self.__role = 'someone'
-        self.__id = '9999999'
         self.__db = database
 
     def admin(self):
@@ -97,29 +110,29 @@ class Admin:
         new_login = {'ID': '', 'username': '', 'password': '', 'role': ''}
 
         # checking the existing id and store id
-        new_ID = check(persons_table, 'ID', 'id')
-        new_persons['ID'] = new_ID
-        new_login['ID'] = new_ID
+        new_id = check(persons_table, 'ID', 'id')
+        new_persons['ID'] = new_id
+        new_login['ID'] = new_id
 
         # checking the existing name and store the name
-        new_F_name = input("Enter your first name: ")
-        new_L_name = input("Enter your last name: ")
+        new_f_name = input("Enter your first name: ")
+        new_l_name = input("Enter your last name: ")
         while persons_table.filter(lambda x: x['first'] + x['last'] == (
-                new_F_name + new_L_name)).table:
+                new_f_name + new_l_name)).table:
             print('Name already taken enter new one')
-            new_F_name = input("Enter your first name: ")
-            new_L_name = input("Enter your last name: ")
-        new_persons['first'] = new_F_name
-        new_persons['last'] = new_L_name
-        new_login['username'] = new_F_name + '.' + new_L_name[0]
+            new_f_name = input("Enter your first name: ")
+            new_l_name = input("Enter your last name: ")
+        new_persons['first'] = new_f_name
+        new_persons['last'] = new_l_name
+        new_login['username'] = new_f_name + '.' + new_l_name[0]
 
         # checking the role and store the role
-        new_Type = input("What is your type (admin, faculty, student): ")
-        while new_Type not in ['admin', 'faculty', 'student']:
-            new_Type = input(
+        new_type = input("What is your type (admin, faculty, student): ")
+        while new_type not in ['admin', 'faculty', 'student']:
+            new_type = input(
                 "What is your type (admin, faculty, student): ")
-        new_persons['type'] = new_Type
-        new_login['role'] = new_Type
+        new_persons['type'] = new_type
+        new_login['role'] = new_type
 
         # choose password
         new_login['password'] = str(input("Please choose 4 digits password: "))
@@ -143,19 +156,19 @@ class Admin:
         """
         # store a variable for a reference table
         reference_table = self.db.search("persons")
-        delete_ID = input("Enter the ID you want to delete: ")
+        delete_id = input("Enter the ID you want to delete: ")
 
         # Check value
         all_id = []
         for value in reference_table.table:
             all_id.append(value['ID'])
-        while str(delete_ID) not in all_id:
+        while str(delete_id) not in all_id:
             print("invalid please enter again")
-            delete_ID = input("Enter the ID you want to delete: ")
+            delete_id = input("Enter the ID you want to delete: ")
 
         num = 0
         for name_id in reference_table.table:
-            if name_id['ID'] == delete_ID:
+            if name_id['ID'] == delete_id:
                 break
             num += 1
         print(
@@ -202,25 +215,31 @@ class Admin:
 
     @property
     def db(self):
+        """
+        getter for db
+        """
         return self.__db
 
 
 class Student:
+    """
+    This class is for student type
+    """
+
     def __init__(self, database, user_id):
         self.__id = user_id
         self.__db = database
 
         # set username
-        for ID in self.db.search("login").table:
-            if ID['ID'] == self.id:
-                self.user_name = ID['username']
+        for _user_id in self.db.search("login").table:
+            if _user_id['ID'] == self.id:
+                self.user_name = _user_id['username']
 
         # set project id
-        for ID in self.db.search("project").table:
-            if ((ID['Lead'] == self.user_name
-                 or ID['Member1'] == self.user_name)
-                    or ID['Member2'] == self.user_name):
-                self.projectID = ID['ProjectID']
+        for _user_id in self.db.search("project").table:
+            if ((self.user_name in [_user_id['Lead'], _user_id['Member1'],
+                                    _user_id['Member2']])):
+                self.project_id = _user_id['ProjectID']
 
     def student(self):
         """
@@ -232,8 +251,12 @@ class Student:
                            "1. Become lead\n"
                            "2. Check member pending request\n"
                            "Pick a number or 'q' to exit: "))
-        if choice not in range(1, 3):  # check if input is within the option
+
+        # check if input is within the option
+        if choice not in range(1, 3):
             raise ValueError("Not in choice")
+
+        # Become lead
         if choice == 1:
             # change only the role but the student is still a student
             self.db.search('login').update('ID', self.id, 'role', 'lead')
@@ -247,8 +270,11 @@ class Student:
 
             # Proceed to lead program instead
             print("Please login again to use lead")
-            return
-        elif choice == 2:
+            print('\nprogram ends.........')
+            sys.exit()
+
+        # Check incoming request
+        if choice == 2:
             self.check_member_request()
 
     def add_project(self):
@@ -276,17 +302,13 @@ class Student:
 
     def lead(self):  # super saiyan student
         """
-        Use this student id to test
-        'ID': '9898118'
-        'username': 'Lionel.M'
-        'password': '2977'
-        'role': 'lead'
+        leader function with choices
         :return:
         """
         # let user pick an action
         choice = int(input("What do you want to do as lead\n"
                            "1. Send invitation to member/s\n"
-                           "2. Change project name\n"
+                           "2. Change update project\n"
                            "3. Send request for advisor\n"
                            "4. Submit project for evaluation\n"
                            "5. Check status\n"
@@ -315,10 +337,10 @@ class Student:
         # member table filter project
         member_table = self.db.search("member_pending_request")
         member_table_filter = member_table.filter(
-            lambda x: x['ProjectID'] == self.projectID)
+            lambda x: x['ProjectID'] == self.project_id)
 
         # Make dict variable for inserting table
-        request_invitation = {'ProjectID': self.projectID, 'Request': '',
+        request_invitation = {'ProjectID': self.project_id, 'Request': '',
                               'Response': 'pending', 'Response_date': ''}
 
         # Store username of wanted user and
@@ -340,9 +362,7 @@ class Student:
         member_table.insert(request_invitation)
 
         # update csv files to loop again
-        Read("Member_pending_request.csv").update_csv(
-            "member_pending_request",
-            member_key, self.db)
+        update_all_csv(self.db)
 
     def send_invite_advisor(self):
         """
@@ -350,7 +370,7 @@ class Student:
         """
         # make table for finding faculty and check pending
         if self.db.search("advisor_pending_request").filter(
-                lambda x: x['ProjectID'] == self.projectID).table:
+                lambda x: x['ProjectID'] == self.project_id).table:
             print("There is still some pending request "
                   "or already have an advisor\n")
             return
@@ -362,7 +382,7 @@ class Student:
 
         # Make dict variable for inserting table
         print(faculty_advisor_table)
-        request_invitation = {'ProjectID': self.projectID,
+        request_invitation = {'ProjectID': self.project_id,
                               'Request': input("Which username do you want "
                                                "to send request to: "),
                               'Response': 'pending', 'Response_date': ''}
@@ -392,7 +412,7 @@ class Student:
                                            'Enter a new project name: ')
         elif choice == 2:
             new = input("What is the new detail: ")
-            project_table.update('ProjectID', self.projectID, 'Detail', new)
+            project_table.update('ProjectID', self.project_id, 'Detail', new)
         Read("Project.csv").update_csv("project", project_key, self.db)
 
     def submit_project(self):
@@ -401,9 +421,9 @@ class Student:
         """
         # check condition first
         pending_member = self.db.search("member_pending_request").filter(
-            lambda x: x['ProjectID'] == self.projectID)
+            lambda x: x['ProjectID'] == self.project_id)
         pending_advisor = self.db.search("advisor_pending_request").filter(
-            lambda x: x['ProjectID'] == self.projectID)
+            lambda x: x['ProjectID'] == self.project_id)
 
         if (pending_member.filter(lambda x: x['Response'] == 'pending').table
                 or pending_advisor.filter(
@@ -412,7 +432,7 @@ class Student:
 
         # check status
         project_table = self.db.search('project').filter(
-            lambda x: x['ProjectID'] == self.projectID)
+            lambda x: x['ProjectID'] == self.project_id)
 
         # Check if already submitted or not
         # Already submitted
@@ -421,9 +441,9 @@ class Student:
             return
 
         # Did not submit
-        elif project_table.table[0]['Status'] == 'ongoing':
+        if project_table.table[0]['Status'] == 'ongoing':
             print("\nSubmitting a project\n")
-            project_table.update('ProjectID', self.projectID,
+            project_table.update('ProjectID', self.project_id,
                                  'Status', 'pending')
 
         update_all_csv(self.db)
@@ -433,7 +453,7 @@ class Student:
         Check the status for approval if > 2 then project complete
         """
         project = self.db.search('project').filter(
-            lambda x: x['ProjectID'] == self.projectID)
+            lambda x: x['ProjectID'] == self.project_id)
         print(project)
         approve = project.table[0].get('Status').count('A')
         if project.table[0]['Status'] == 'finished':
@@ -515,32 +535,55 @@ class Student:
 
     def member(self):
         """
-        Member can only view the project
+        Member function with choice
+        watch and update project
         """
-        print("\nThis is your project")
-        self.check_stat()
+        # let user pick a choice
+        choice = int(input("What do you want to do as member\n"
+                           "1. Change update project\n"
+                           "2. Check status\n"
+                           "Pick a number: "))
+        if choice not in range(1, 3):  # check if input is within the option
+            raise ValueError("Not in choice")
+        if choice == 1:
+            self.update_project()
+        elif choice == 2:
+            self.check_stat()
 
     @property
     def db(self):
+        """
+        getter for db
+        """
         return self.__db
 
     @property
     def id(self):
+        """
+        getter for id
+        """
         return self.__id
 
     @id.setter
     def id(self, value):
+        """
+        setter for id
+        """
         self.__id = value
 
 
 class Faculty:
+    """
+    This class is for faculty type
+    """
+
     def __init__(self, database, user_id):
         self.__id = user_id
         self.__db = database
         # set username
-        for ID in self.db.search("login").table:
-            if ID['ID'] == self.id:
-                self.user_name = ID['username']
+        for _user_id in self.db.search("login").table:
+            if _user_id['ID'] == self.id:
+                self.user_name = _user_id['username']
 
     def faculty(self):
         """
@@ -622,8 +665,10 @@ class Faculty:
         print('q for exit')
         choice = str(input("Which group ID do you want to "
                            "accept/decline the offer: "))
+
+        # Check if the user wants to quit or not
         if choice == 'q':
-            return
+            return None
         user_request = self.db.search("advisor_pending_request").filter(
             lambda x: x['Request'] == self.user_name)
         while not user_request.filter(lambda x: x['ProjectID'] == choice):
@@ -632,7 +677,8 @@ class Faculty:
             choice = str(input("Which group ID do you want "
                                "to accept/decline the offer: "))
             if choice == 'q':
-                return
+                return None
+
         return choice
 
     def show_project_table(self):
@@ -684,33 +730,52 @@ class Faculty:
             evaluate_project['Evaluator'] += f"+{self.user_name}"
 
         # Decide to approve or deny
-        choice = input("Do you A (Approve) or D (Decline): ")
+        choice = input("Do you A (Approve) or D (Deny): ")
         while choice not in ['A', 'D']:
             print("Type only A or D")
-            choice = input("Do you A (Approve) or D (Decline): ")
+            choice = input("Do you A (Approve) or D (Deny): ")
 
-        # Status checking
-        if evaluate_project['Status'] == 'pending':
-            evaluate_project['Status'] = choice
+        # Choice Approve
+        if choice == 'A':
+            # Status checking
+            if evaluate_project['Status'] == 'pending':
+                evaluate_project['Status'] = choice
+            else:
+                evaluate_project['Status'] += choice
+            # In case if they got more than 2 approve
+            if evaluate_project['Status'].count('A') >= 2:
+                print("This project is finished")
+                evaluate_project['Status'] = 'finished'
+
+        # Choice Deny
         else:
-            evaluate_project['Status'] += choice
-
-        # In case if they got more than 2 approve
-        if evaluate_project['Status'].count('A') >= 2:
-            print("This project is finished")
-
-            evaluate_project['Status'] = 'finished'
+            reason = input("What is the reason of this deny please comment: ")
+            if evaluate_project['Status'] == 'pending':
+                evaluate_project['Status'] = choice
+                evaluate_project['Comment'] = reason
+            else:
+                evaluate_project['Status'] += choice
+                evaluate_project['Comment'] = f"/{reason}"
 
         update_all_csv(self.db)
 
     @property
     def db(self):
+        """
+        getter for db
+        """
         return self.__db
 
     @property
     def id(self):
+        """
+        getter for id
+        """
         return self.__id
 
     @id.setter
     def id(self, value):
+        """
+        setter for id
+        """
         self.__id = value

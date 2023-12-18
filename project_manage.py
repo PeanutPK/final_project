@@ -1,8 +1,7 @@
 # import files that I use in this code
 from database import DB, Read, Table
 import sys
-from Roles import Admin, Student, Faculty, update_all_csv
-from csv_keys import *
+from roles import Admin, Student, Faculty, update_all_csv
 
 my_db = DB()
 
@@ -12,17 +11,17 @@ def initializing():
     Thia function initializing what you need in the main program.
     :return:
     """
-    persons = Read("persons.csv").readCSV()
-    login_t = Read("login.csv").readCSV()
+    persons = Read("persons.csv").read_csv()
+    login_t = Read("login.csv").read_csv()
     person_table = Table("persons", persons)
     login_table = Table("login", login_t)
-    project_table = Table("project", Read("Project.csv").readCSV())
+    project_table = Table("project", Read("Project.csv").read_csv())
     Advisor_pending_request_table = Table(
         "advisor_pending_request",
-        Read("Advisor_pending_request.csv").readCSV()
+        Read("Advisor_pending_request.csv").read_csv()
     )
     Member_pending_request_table = Table(
-        "member_pending_request", Read("Member_pending_request.csv").readCSV()
+        "member_pending_request", Read("Member_pending_request.csv").read_csv()
     )
 
     # Enable the line below to test the table
@@ -98,9 +97,6 @@ def exit():
     sys.exit()
 
 
-# link for the code writing down back to csv files
-# https://www.pythonforbeginners.com/basics/list-of-dictionaries-to-csv-in-python
-
 if __name__ == "__main__":
     initializing()
     stop = ''
@@ -108,5 +104,5 @@ if __name__ == "__main__":
     while stop != 'n':
         run(val)
         stop = input('\nContinue? (y/n): ')
-        print("-"*21)
+        print("-" * 21)
     exit()

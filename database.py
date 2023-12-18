@@ -1,5 +1,4 @@
-# try wrapping the code below that reads a persons.csv file in a class
-# and make it more general such that it can read in any csv file
+"""This is the source of each important function use in project_manage.py"""
 
 import csv
 import os
@@ -18,7 +17,7 @@ class Read:
         """
         self.file = file
 
-    def readCSV(self):
+    def read_csv(self):
         """
         Read a csv file
         :return:
@@ -34,6 +33,9 @@ class Read:
         return _list
 
     def update_csv(self, table_name: str, key_list: list, my_db):
+        """
+        Update a csv file
+        """
         myFile = open(self.file, "w")
         writer = csv.writer(myFile)
         writer.writerow(key_list)
@@ -196,7 +198,7 @@ class Table:
 
         # print dict keys
         _dict_key = self.table[0].keys()
-        print(f"{'num':<4}",end='')
+        print(f"{'num':<4}", end='')
         for key in _dict_key:
             print(f" | {key:>14}", end='')
 
@@ -212,20 +214,20 @@ class Table:
 
 def test():
     persons = Read("persons.csv")
-    login = Read("login.csv").readCSV()
+    login = Read("login.csv").read_csv()
     print("read")
-    print(persons.readCSV())
+    print(persons.read_csv())
     print()
 
-    my_DB = DB()
-    my_table = Table("persons", persons.readCSV())
+    my_db = DB()
+    my_table = Table("persons", persons.read_csv())
     print("table")
     print(my_table)
-    my_DB.insert(my_table)
+    my_db.insert(my_table)
     print()
 
     print("DB")
-    print(my_DB.search("persons"))
+    print(my_db.search("persons"))
     print()
 
     print('admin change admin status')
@@ -240,8 +242,8 @@ def test():
 
     print("insert login")
     login_table = Table('login', login)
-    my_DB.insert(login_table)
-    print(my_DB.search('login'))
+    my_db.insert(login_table)
+    print(my_db.search('login'))
 
 
 if __name__ == "__main__":
