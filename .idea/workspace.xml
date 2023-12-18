@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="850c8cb5-8854-46a5-ac25-7c7a6917af87" name="Changes" comment="README.md pylint before deadline">
+    <list default="true" id="850c8cb5-8854-46a5-ac25-7c7a6917af87" name="Changes" comment="Final submission">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Project.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/login.csv" beforeDir="false" afterPath="$PROJECT_DIR$/login.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project_manage.py" beforeDir="false" afterPath="$PROJECT_DIR$/project_manage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -399,13 +395,27 @@
       <option name="project" value="LOCAL" />
       <updated>1702894994902</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="README.md pylint almost 10/10">
+      <option name="closed" value="true" />
+      <created>1702896177355</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1702896177355</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Final submission">
+      <option name="closed" value="true" />
+      <created>1702896521503</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1702896521503</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="push test" />
-    <MESSAGE value="test" />
     <MESSAGE value="change str" />
     <MESSAGE value="clean and redo" />
     <MESSAGE value="a little progress" />
@@ -429,6 +439,8 @@
     <MESSAGE value="Try pylint and write README.md" />
     <MESSAGE value="README.md" />
     <MESSAGE value="README.md pylint before deadline" />
-    <option name="LAST_COMMIT_MESSAGE" value="README.md pylint before deadline" />
+    <MESSAGE value="README.md pylint almost 10/10" />
+    <MESSAGE value="Final submission" />
+    <option name="LAST_COMMIT_MESSAGE" value="Final submission" />
   </component>
 </project>
