@@ -4,11 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="850c8cb5-8854-46a5-ac25-7c7a6917af87" name="Changes" comment="Work">
+    <list default="true" id="850c8cb5-8854-46a5-ac25-7c7a6917af87" name="Changes" comment="Finished maybe need debug more">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Advisor_pending_request.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Advisor_pending_request.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Member_pending_request.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Member_pending_request.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Project.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proposal.md" beforeDir="false" afterPath="$PROJECT_DIR$/Proposal.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Roles.py" beforeDir="false" afterPath="$PROJECT_DIR$/Roles.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TODO.md" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login.csv" beforeDir="false" afterPath="$PROJECT_DIR$/login.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project_manage.py" beforeDir="false" afterPath="$PROJECT_DIR$/project_manage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -335,7 +338,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702836914382</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Finished maybe need debug more">
+      <option name="closed" value="true" />
+      <created>1702839877474</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1702839877474</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -363,6 +374,7 @@
     <MESSAGE value="Start faculty" />
     <MESSAGE value="Start evaluate step" />
     <MESSAGE value="Work" />
-    <option name="LAST_COMMIT_MESSAGE" value="Work" />
+    <MESSAGE value="Finished maybe need debug more" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finished maybe need debug more" />
   </component>
 </project>

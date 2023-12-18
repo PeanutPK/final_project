@@ -1,7 +1,7 @@
 ProjectID,Title,Lead,Member1,Member2,Advisor,Status,Detail,Comment,Evaluator
 4441971,ZenZone,Lionel.M,,,,ongoing,detau,,
 7601734,CatalystCanvas,Manuel.N,,,Karim.B,ongoing,detau,,
-3802967,QuantumHorizon,Test2.C,,,,ongoing,detau,,
+3802967,QuantumHorizon,Test2.C,,,Arjen.R,ongoing,detau,,
 6378452,VelocityVista,Function.T,Test.M,Test.S,,ongoing,detau,,
-3099440,Test,Robert.L,,,,A,just test,,Karim.B
-6278963,AetherAscent,Gareth.B,9A.B,,,ongoing,Heaven,,
+3099440,Test,Robert.L,,,,finished,just test,,Arjen.R+Karim.B
+6278963,AetherAscent,Gareth.B,9A.B,,,pending,Heaven,,

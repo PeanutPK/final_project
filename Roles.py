@@ -413,11 +413,20 @@ class Student:
         # check status
         project_table = self.db.search('project').filter(
             lambda x: x['ProjectID'] == self.projectID)
-        if project_table.filter(
-                lambda x: 'pending' in x['Status'] or
-                          'approved' in x['Status']):
-            print("You already submit the project\n")
-        project_table.update('ProjectID', self.id, 'Status', 'pending')
+
+        # Check if already submitted or not
+        # Already submitted
+        if project_table.table[0]['Status'] == 'pending':
+            print("\nYou already submit the project\n")
+            return
+
+        # Did not submit
+        elif project_table.table[0]['Status'] == 'ongoing':
+            print("\nSubmitting a project\n")
+            project_table.update('ProjectID', self.projectID,
+                                 'Status', 'pending')
+
+        update_all_csv(self.db)
 
     def check_stat(self):
         """
@@ -428,7 +437,8 @@ class Student:
         print(project)
         approve = project.table[0].get('Status').count('A')
         if project.table[0]['Status'] == 'finished':
-            print("Congratulation you project is finished")
+            print("\n\nCongratulation this project is finished!!!")
+            print("🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉")
         else:
             print(f"You currently have {approve} approve/s")
 
@@ -556,7 +566,7 @@ class Faculty:
         elif choice == 2:
             self.evaluate()
 
-        # show all project
+        # show all projects
         elif choice == 3:
             self.show_project_table()
 
@@ -583,7 +593,7 @@ class Faculty:
                            "2. decline\n"
                            "Pick a number: ")
 
-        if acceptance == 1:
+        if acceptance == '1':
             project_table.update('ProjectID', choice, 'Advisor',
                                  self.user_name)
 
@@ -594,7 +604,7 @@ class Faculty:
             login_table.update('ID', self.id, 'role', 'advisor')
             print("updated table and role")
 
-        elif acceptance == 2:
+        elif acceptance == '2':
             # update declined project
             user_request.update('ProjectID', choice, 'Response', 'declined')
 
@@ -668,7 +678,9 @@ class Faculty:
               f"Detail: {evaluate_project['Detail']}")
 
         # Check faculty who evaluated the project
-        if self.user_name not in evaluate_project['Evaluator']:
+        if evaluate_project['Evaluator'] == '':
+            evaluate_project['Evaluator'] = self.user_name
+        if self.user_name not in evaluate_project['Evaluator'].split('+'):
             evaluate_project['Evaluator'] += f"+{self.user_name}"
 
         # Decide to approve or deny
@@ -682,11 +694,14 @@ class Faculty:
             evaluate_project['Status'] = choice
         else:
             evaluate_project['Status'] += choice
+
+        # In case if they got more than 2 approve
         if evaluate_project['Status'].count('A') >= 2:
-            print("\n\nCongratulation your project is finished!!!")
-            print("🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉")
+            print("This project is finished")
 
             evaluate_project['Status'] = 'finished'
+
+        update_all_csv(self.db)
 
     @property
     def db(self):

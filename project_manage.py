@@ -107,5 +107,6 @@ if __name__ == "__main__":
     val = login()
     while stop != 'n':
         run(val)
-        stop = input('\nContinue? (y/n): \n')
+        stop = input('\nContinue? (y/n): ')
+        print("-"*21)
     exit()
