@@ -1,6 +1,6 @@
-# import files that I use in this code
-from database import DB, Read, Table
+"""The main part to run and test program"""
 import sys
+from database import DB, Read, Table
 from roles import Admin, Student, Faculty, update_all_csv
 
 my_db = DB()
@@ -65,29 +65,29 @@ def login():
 
 def run(value):
     role = value[1]
-    userID = value[0]
+    user_id = value[0]
     if role == 'admin':
         user = Admin(my_db)
         user.admin()
     elif role == 'student':
-        user = Student(my_db, userID)
+        user = Student(my_db, user_id)
         user.student()
     elif role == 'member':
-        user = Student(my_db, userID)
+        user = Student(my_db, user_id)
         user.member()
     elif role == 'lead':
-        user = Student(my_db, userID)
+        user = Student(my_db, user_id)
         user.lead()
     elif role == 'faculty':
-        user = Faculty(my_db, userID)
+        user = Faculty(my_db, user_id)
         user.faculty()
     elif role == 'advisor':
-        user = Faculty(my_db, userID)
+        user = Faculty(my_db, user_id)
         user.faculty()
 
 
 # define a function called exit
-def exit():
+def exit_program():
     """
     For exiting a program and update the csv files.
     :return:
@@ -99,10 +99,10 @@ def exit():
 
 if __name__ == "__main__":
     initializing()
-    stop = ''
+    STOP = ''
     val = login()
-    while stop != 'n':
+    while STOP != 'n':
         run(val)
-        stop = input('\nContinue? (y/n): ')
+        STOP = input('\nContinue? (y/n): ')
         print("-" * 21)
-    exit()
+    exit_program()

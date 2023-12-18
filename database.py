@@ -26,8 +26,9 @@ class Read:
             os.path.join(os.getcwd(), os.path.dirname(__file__))
         )
         _list = []
-        with open(os.path.join(__location__, self.file)) as f:
-            rows = csv.DictReader(f)
+        with open(os.path.join(__location__, self.file),
+                  encoding='UTF-8') as file:
+            rows = csv.DictReader(file)
             for row in rows:
                 _list.append(dict(row))
         return _list
@@ -36,7 +37,7 @@ class Read:
         """
         Update a csv file
         """
-        myFile = open(self.file, "w")
+        myFile = open(self.file, "w", encoding='UTF-8')
         writer = csv.writer(myFile)
         writer.writerow(key_list)
         for dictionary in my_db.search(table_name).table:
@@ -213,6 +214,9 @@ class Table:
 
 
 def test():
+    """
+    For testing some of the function above
+    """
     persons = Read("persons.csv")
     login = Read("login.csv").read_csv()
     print("read")

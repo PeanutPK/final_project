@@ -279,7 +279,7 @@ class Student:
 
     def add_project(self):
         """
-        Search and add dict to a table
+        Search and add project dict to a table
         """
         # make a variable to store the searched table
         project_table = self.db.search("project")
@@ -366,7 +366,7 @@ class Student:
 
     def send_invite_advisor(self):
         """
-        Send request for advisor
+        Send an invitation to a faculty only one at a time
         """
         # make table for finding faculty and check pending
         if self.db.search("advisor_pending_request").filter(
@@ -464,7 +464,7 @@ class Student:
 
     def check_member_request(self):
         """
-        Check table and accept or quit
+        Check the table of user invitation to accept or leave it
         """
         # Set variable for table
         user_request = self.db.search("member_pending_request").filter(
@@ -591,7 +591,7 @@ class Faculty:
         :return:
         """
         # let user pick an action
-        choice = int(input("What do you want to do as faculty\n"
+        choice = int(input("What do you want to do as faculty staff\n"
                            "1. Check advisor pending request\n"
                            "2. Evaluate projects\n"
                            "3. See all projects\n"
@@ -615,7 +615,7 @@ class Faculty:
 
     def check_faculty_request(self):
         """
-        Check table and accept
+        Check the table of user invitation to accept or deny it
         """
         # Set variable for table
         user_request = self.db.search("advisor_pending_request").filter(
@@ -660,7 +660,7 @@ class Faculty:
 
     def project_find_id_consider(self):
         """
-        Find project
+        Find project of the group you want using id
         """
         print('q for exit')
         choice = str(input("Which group ID do you want to "
