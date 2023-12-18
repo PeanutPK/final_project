@@ -16,26 +16,23 @@ def initializing():
     person_table = Table("persons", persons)
     login_table = Table("login", login_t)
     project_table = Table("project", Read("Project.csv").read_csv())
-    Advisor_pending_request_table = Table(
+    advisor_pending_request_table = Table(
         "advisor_pending_request",
         Read("Advisor_pending_request.csv").read_csv()
     )
-    Member_pending_request_table = Table(
+    member_pending_request_table = Table(
         "member_pending_request", Read("Member_pending_request.csv").read_csv()
     )
 
     # Enable the line below to test the table
     print(login_table)
-    # print(project_table)
-    # print(Advisor_pending_request_table)
-    # print(Member_pending_request_table)
 
     # add tables to the database
     my_db.insert(person_table)
     my_db.insert(login_table)
     my_db.insert(project_table)
-    my_db.insert(Advisor_pending_request_table)
-    my_db.insert(Member_pending_request_table)
+    my_db.insert(advisor_pending_request_table)
+    my_db.insert(member_pending_request_table)
 
 
 def login():
@@ -64,6 +61,9 @@ def login():
 
 
 def run(value):
+    """
+    The main function to operate the system
+    """
     role = value[1]
     user_id = value[0]
     if role == 'admin':
