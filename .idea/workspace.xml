@@ -4,16 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="850c8cb5-8854-46a5-ac25-7c7a6917af87" name="Changes" comment="Finished">
+    <list default="true" id="850c8cb5-8854-46a5-ac25-7c7a6917af87" name="Changes" comment="Try pylint and write README.md">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Roles.py" beforeDir="false" afterPath="$PROJECT_DIR$/roles.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backup_csv_just_in_case/Advisor_pending_request.csv" beforeDir="false" afterPath="$PROJECT_DIR$/backup_csv_just_in_case/Advisor_pending_request.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backup_csv_just_in_case/Member_pending_request.csv" beforeDir="false" afterPath="$PROJECT_DIR$/backup_csv_just_in_case/Member_pending_request.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backup_csv_just_in_case/Project.csv" beforeDir="false" afterPath="$PROJECT_DIR$/backup_csv_just_in_case/Project.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/csv_keys.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project_manage.py" beforeDir="false" afterPath="$PROJECT_DIR$/project_manage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +77,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for database.test">
+  <component name="RunManager" selected="Python.project_manage">
     <configuration name="database" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="final_project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -371,12 +364,19 @@
       <option name="project" value="LOCAL" />
       <updated>1702871681148</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Try pylint and write README.md">
+      <option name="closed" value="true" />
+      <created>1702881995684</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1702881995684</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="commit test after the last final exam" />
     <MESSAGE value="added csv files" />
     <MESSAGE value="added backup csv files" />
     <MESSAGE value="push test" />
@@ -401,6 +401,7 @@
     <MESSAGE value="Work" />
     <MESSAGE value="Finished maybe need debug more" />
     <MESSAGE value="Finished" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished" />
+    <MESSAGE value="Try pylint and write README.md" />
+    <option name="LAST_COMMIT_MESSAGE" value="Try pylint and write README.md" />
   </component>
 </project>
